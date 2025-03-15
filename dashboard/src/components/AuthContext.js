@@ -17,9 +17,13 @@ export function AuthProvider({ children }) {
         window.location.href = "http://localhost:3000";
         return;
       }
+
+      const BACKEND_URL =
+        process.env.REACT_APP_BACKEND_URL || "http://localhost:3002";
+
       try {
         const { data } = await axios.post(
-          "http://localhost:3002/",
+          { BACKEND_URL },
           {},
           { withCredentials: true }
         );
