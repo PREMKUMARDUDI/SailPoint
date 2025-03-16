@@ -3,12 +3,15 @@ import axios from "axios";
 
 const HoldingsContext = createContext();
 
+const BACKEND_URL =
+  process.env.REACT_APP_BACKEND_URL || "http://localhost:3002";
+
 export function HoldingsProvider({ children }) {
   const [allHoldings, setAllHoldings] = useState([]);
 
   useEffect(() => {
     axios
-      .get("http://localhost:3002/allHoldings")
+      .get(`${BACKEND_URL}/allHoldings`)
       .then((res) => {
         setAllHoldings(res.data);
       })

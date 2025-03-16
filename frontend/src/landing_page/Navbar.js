@@ -3,6 +3,11 @@ import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useCookies } from "react-cookie";
 import axios from "axios";
 
+const BACKEND_URL =
+  process.env.REACT_APP_BACKEND_URL || "http://localhost:3002";
+const DASHBOARD_URL =
+  process.env.REACT_APP_DASHBOARD_URL || "http://localhost:3001";
+
 function Navbar() {
   const [cookies, , removeCookie] = useCookies(["token"]);
   const navigate = useNavigate();
@@ -23,7 +28,7 @@ function Navbar() {
       try {
         console.log("Verifying token:", cookies.token);
         const { data } = await axios.post(
-          "http://localhost:3002/",
+          `${BACKEND_URL}/`,
           {},
           { withCredentials: true }
         );
@@ -42,7 +47,7 @@ function Navbar() {
   const handleDashboardClick = (e) => {
     e.preventDefault();
     if (isAuthenticated) {
-      window.location.href = "http://localhost:3001";
+      window.location.href = `${DASHBOARD_URL}/`;
     } else {
       navigate("/signup", { state: { fromDashboard: true } });
     }

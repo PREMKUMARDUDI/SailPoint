@@ -4,6 +4,9 @@ import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
+const BACKEND_URL =
+  process.env.REACT_APP_BACKEND_URL || "http://localhost:3002";
+
 const Signup = () => {
   const [inputValue, setInputValue] = useState({
     email: "",
@@ -26,7 +29,7 @@ const Signup = () => {
     e.preventDefault();
     try {
       const { data } = await axios.post(
-        "http://localhost:3002/signup",
+        `${BACKEND_URL}/signup`,
         { ...inputValue },
         { withCredentials: true }
       );

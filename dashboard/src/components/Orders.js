@@ -2,10 +2,13 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 
+const BACKEND_URL =
+  process.env.REACT_APP_BACKEND_URL || "http://localhost:3002";
+
 const Orders = () => {
   const [allOrders, setAllOrders] = useState([]);
   useEffect(() => {
-    axios.get("http://localhost:3002/allOrders").then((res) => {
+    axios.get(`${BACKEND_URL}/allOrders`).then((res) => {
       setAllOrders(res.data);
     });
   }, []);
@@ -15,7 +18,7 @@ const Orders = () => {
       <h3 className="title">Orders ({allOrders.length})</h3>
       {allOrders.length !== 0 && (
         <button
-          onClick={() => axios.delete("http://localhost:3002/deleteAllOrders")}
+          onClick={() => axios.delete(`${BACKEND_URL}/deleteAllOrders`)}
           style={{ margin: "5px", padding: "5px" }}
         >
           Clear all

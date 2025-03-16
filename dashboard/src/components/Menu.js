@@ -2,6 +2,9 @@ import React, { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "./AuthContext";
 
+const FRONTEND_URL =
+  process.env.REACT_APP_FRONTEND_URL || "http://localhost:3000";
+
 const Menu = () => {
   const [selectedMenu, setSelectedMenu] = useState(0);
   const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
@@ -105,7 +108,7 @@ const Menu = () => {
             </Link>
           </li>
           <li>
-            <Link style={{ textDecoration: "none" }} to="http://localhost:3000">
+            <Link style={{ textDecoration: "none" }} to={`${FRONTEND_URL}`}>
               <p
                 className={selectedMenu === 0 ? activeMenuclass : menuclass}
                 style={{ color: "#000" }}

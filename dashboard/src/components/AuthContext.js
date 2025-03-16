@@ -4,6 +4,11 @@ import axios from "axios";
 
 const AuthContext = createContext();
 
+const BACKEND_URL =
+  process.env.REACT_APP_BACKEND_URL || "http://localhost:3002";
+const FRONTEND_URL =
+  process.env.REACT_APP_FRONTEND_URL || "http://localhost:3000";
+
 export function AuthProvider({ children }) {
   const [cookies, , removeCookie] = useCookies(["token"]);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -14,16 +19,13 @@ export function AuthProvider({ children }) {
       if (!cookies.token) {
         setIsAuthenticated(false);
         setUser(null);
-        window.location.href = "http://localhost:3000";
+        window.location.href = FRONTEND_URL;
         return;
       }
 
-      const BACKEND_URL =
-        process.env.REACT_APP_BACKEND_URL || "http://localhost:3002";
-
       try {
         const { data } = await axios.post(
-          { BACKEND_URL },
+          `${BACKEND_URL}/`,
           {},
           { withCredentials: true }
         );
@@ -33,13 +35,13 @@ export function AuthProvider({ children }) {
         } else {
           setIsAuthenticated(false);
           setUser(null);
-          window.location.href = "http://localhost:3000"; // Redirect if token invalid
+          window.location.href = FRONTEND_URL; // Redirect if token invalid
         }
       } catch (error) {
         console.error("Auth verification failed:", error.message);
         setIsAuthenticated(false);
         setUser(null);
-        window.location.href = "http://localhost:3000"; // Redirect on error
+        window.location.href = FRONTEND_URL; // Redirect on error
       }
     };
     verifyUser();
@@ -50,7 +52,7 @@ export function AuthProvider({ children }) {
     setIsAuthenticated(false);
     setUser(null);
     localStorage.removeItem("isAuthenticated"); // Clear cached state
-    window.location.href = "http://localhost:3000"; // Redirect to frontend
+    window.location.href = FRONTEND_URL; // Redirect to frontend
   };
 
   return (

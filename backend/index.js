@@ -27,7 +27,10 @@ process.on("unhandledRejection", (reason, promise) => {
 
 app.use(
   cors({
-    origin: ["http://localhost:3000", "http://localhost:3001"],
+    origin: [
+      "https://sailpoint-frontend.onrender.com",
+      "https://sailpoint-dashboard.onrender.com",
+    ],
     credentials: true,
   })
 );
