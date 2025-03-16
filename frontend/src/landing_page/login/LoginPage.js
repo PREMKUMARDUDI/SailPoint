@@ -6,6 +6,8 @@ import "react-toastify/dist/ReactToastify.css";
 
 const BACKEND_URL =
   process.env.REACT_APP_BACKEND_URL || "http://localhost:3002";
+const DASHBOARD_URL =
+  process.env.REACT_APP_DASHBOARD_URL || "http://localhost:3001";
 
 const Login = () => {
   const [inputValue, setInputValue] = useState({
@@ -36,7 +38,7 @@ const Login = () => {
       if (success) {
         handleSuccess(message);
         setTimeout(() => {
-          window.location.href = "http://localhost:3001";
+          window.location.href = `${DASHBOARD_URL}`;
         }, 1000);
       } else {
         handleError(message);
