@@ -21,7 +21,10 @@ export function AuthProvider({ children }) {
         console.log("No token in dashboard");
         setIsAuthenticated(false);
         setUser(null);
-        window.location.href = FRONTEND_URL;
+        setTimeout(() => {
+          // Delay redirect
+          window.location.href = FRONTEND_URL;
+        }, 500);
         return;
       }
 
@@ -43,13 +46,12 @@ export function AuthProvider({ children }) {
         }
       } catch (error) {
         console.error("Auth error:", error.response || error.message);
-        console.error("Auth verification failed:", error.message);
         setIsAuthenticated(false);
         setUser(null);
         window.location.href = FRONTEND_URL; // Redirect on error
       }
     };
-    verifyUser();
+    setTimeout(verifyUser, 100);
   }, [cookies]);
 
   const logout = () => {

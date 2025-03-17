@@ -11,7 +11,7 @@ const DASHBOARD_URL =
   process.env.REACT_APP_DASHBOARD_URL || "http://localhost:3001";
 
 const Login = () => {
-  const [cookies] = useCookies(["token"]);
+  const [cookies, setCookie] = useCookies(["token"]);
   const [inputValue, setInputValue] = useState({
     email: "",
     password: "",
@@ -43,7 +43,17 @@ const Login = () => {
         console.log("Login response:", data);
         console.log("Response headers:", response.headers);
         console.log("Cookies after login:", document.cookie);
-        console.log("React-cookie:", cookies);
+        console.log("React-cookie before sync:", cookies);
+        const setCookieHeader = response.headers["set-cookie"];
+        if (setCookieHeader) {
+          const token = setCookieHeader[0].split(";")[0].split("=")[1];
+          setCookie("token", token, {
+            path: "/",
+            secure: true,
+            sameSite: "none",
+          });
+        }
+        console.log("React-cookie after sync:", cookies);
         handleSuccess(message);
         setTimeout(() => {
           window.location.href = `${DASHBOARD_URL}`;

@@ -55,6 +55,7 @@ module.exports.Login = async (req, res, next) => {
       secure: process.env.NODE_ENV === "production",
       sameSite: "None",
       path: "/",
+      domain: ".onrender.com",
     });
     console.log("Login: Token set:", token);
     console.log("Login: Response headers:", res.getHeaders());
