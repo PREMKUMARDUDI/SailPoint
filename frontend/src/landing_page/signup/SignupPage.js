@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useCookies } from "react-cookie";
 
 const BACKEND_URL =
   process.env.REACT_APP_BACKEND_URL || "http://localhost:3002";
@@ -10,6 +11,7 @@ const DASHBOARD_URL =
   process.env.REACT_APP_DASHBOARD_URL || "http://localhost:3001";
 
 const Signup = () => {
+  const [cookies] = useCookies(["token"]);
   const [inputValue, setInputValue] = useState({
     email: "",
     password: "",
