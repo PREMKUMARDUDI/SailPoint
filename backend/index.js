@@ -32,6 +32,8 @@ app.use(
       "https://sailpoint-dashboard.onrender.com",
     ],
     credentials: true,
+    methods: ["GET", "POST", "DELETE"],
+    allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
 app.use(bodyParser.json());

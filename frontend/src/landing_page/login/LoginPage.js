@@ -36,8 +36,9 @@ const Login = () => {
       );
       const { success, message } = data;
       if (success) {
-        console.log("Login success, response:", data);
+        console.log("Login response:", data);
         console.log("Cookies after login:", document.cookie);
+        console.log("React-cookie:", cookies);
         handleSuccess(message);
         setTimeout(() => {
           window.location.href = `${DASHBOARD_URL}`;

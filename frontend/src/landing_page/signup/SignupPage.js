@@ -37,8 +37,9 @@ const Signup = () => {
       );
       const { success, message } = data;
       if (success) {
-        console.log("Signup success, response:", data);
-        console.log("Cookies after signup:", document.cookie);
+        console.log("Signup response:", data);
+        console.log("Cookies after signup:", document.cookie); // Should show token if not httpOnly
+        console.log("React-cookie:", cookies); // Check react-cookie
         handleSuccess(message);
         setTimeout(() => {
           window.location.href = `${DASHBOARD_URL}`;

@@ -19,7 +19,7 @@ module.exports.Signup = async (req, res, next) => {
     res.cookie("token", token, {
       httpOnly: true, // Allow frontend access
       secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
+      sameSite: "None",
       path: "/",
     });
     res.status(201).json({
@@ -51,7 +51,7 @@ module.exports.Login = async (req, res, next) => {
     res.cookie("token", token, {
       httpOnly: true, // Allow frontend access
       secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
+      sameSite: "None",
       path: "/",
     });
     res.status(201).json({

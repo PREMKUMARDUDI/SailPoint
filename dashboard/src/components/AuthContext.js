@@ -16,7 +16,9 @@ export function AuthProvider({ children }) {
 
   useEffect(() => {
     const verifyUser = async () => {
+      console.log("Dashboard cookies:", cookies);
       if (!cookies.token) {
+        console.log("No token in dashboard");
         setIsAuthenticated(false);
         setUser(null);
         window.location.href = FRONTEND_URL;
@@ -24,6 +26,7 @@ export function AuthProvider({ children }) {
       }
 
       try {
+        console.log("Verifying token:", cookies.token);
         const { data } = await axios.post(
           `${BACKEND_URL}/`,
           {},
