@@ -1,1 +1,1 @@
-It is a Full Stack Stock Trading plateform clone of Zerodha.com.
+It is a Full Stack Stock Trading plateform.
