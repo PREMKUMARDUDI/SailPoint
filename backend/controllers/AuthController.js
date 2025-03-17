@@ -1,4 +1,3 @@
-// controllers/AuthController.js
 const { UsersModel } = require("../model/UsersModel"); // Ensure path is correct
 const { createSecretToken } = require("../util/SecretToken");
 const bcrypt = require("bcryptjs");
@@ -18,8 +17,8 @@ module.exports.Signup = async (req, res, next) => {
     });
     const token = createSecretToken(user._id);
     res.cookie("token", token, {
-      httpOnly: false, // Allow frontend access
-      secure: false, // Set to true in production with HTTPS
+      httpOnly: true, // Allow frontend access
+      secure: process.env.NODE_ENV === "production",
       sameSite: "lax",
       path: "/",
     });
@@ -50,8 +49,8 @@ module.exports.Login = async (req, res, next) => {
     }
     const token = createSecretToken(user._id);
     res.cookie("token", token, {
-      httpOnly: false,
-      secure: false,
+      httpOnly: true, // Allow frontend access
+      secure: process.env.NODE_ENV === "production",
       sameSite: "lax",
       path: "/",
     });

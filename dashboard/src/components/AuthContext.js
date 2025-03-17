@@ -29,6 +29,7 @@ export function AuthProvider({ children }) {
           {},
           { withCredentials: true }
         );
+        console.log("Dashboard verification response:", data);
         if (data.status) {
           setIsAuthenticated(true);
           setUser(data.user);
@@ -38,6 +39,7 @@ export function AuthProvider({ children }) {
           window.location.href = FRONTEND_URL; // Redirect if token invalid
         }
       } catch (error) {
+        console.error("Auth error:", error.response || error.message);
         console.error("Auth verification failed:", error.message);
         setIsAuthenticated(false);
         setUser(null);

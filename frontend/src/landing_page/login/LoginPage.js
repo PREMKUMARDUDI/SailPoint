@@ -36,6 +36,8 @@ const Login = () => {
       );
       const { success, message } = data;
       if (success) {
+        console.log("Login success, response:", data);
+        console.log("Cookies after login:", document.cookie);
         handleSuccess(message);
         setTimeout(() => {
           window.location.href = `${DASHBOARD_URL}`;

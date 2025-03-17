@@ -37,6 +37,8 @@ const Signup = () => {
       );
       const { success, message } = data;
       if (success) {
+        console.log("Signup success, response:", data);
+        console.log("Cookies after signup:", document.cookie);
         handleSuccess(message);
         setTimeout(() => {
           window.location.href = `${DASHBOARD_URL}`;
