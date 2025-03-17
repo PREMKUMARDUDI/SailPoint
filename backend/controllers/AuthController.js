@@ -22,6 +22,8 @@ module.exports.Signup = async (req, res, next) => {
       sameSite: "None",
       path: "/",
     });
+    console.log("Signup: Token set:", token);
+    console.log("Signup: Response headers:", res.getHeaders());
     res.status(201).json({
       message: "User signed in successfully",
       success: true,
@@ -54,6 +56,8 @@ module.exports.Login = async (req, res, next) => {
       sameSite: "None",
       path: "/",
     });
+    console.log("Login: Token set:", token);
+    console.log("Login: Response headers:", res.getHeaders());
     res.status(201).json({
       message: "User logged in successfully",
       success: true,

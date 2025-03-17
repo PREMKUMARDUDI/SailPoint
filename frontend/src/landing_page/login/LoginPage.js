@@ -31,14 +31,16 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const { data } = await axios.post(
+      const response = await axios.post(
         `${BACKEND_URL}/login`,
         { ...inputValue },
         { withCredentials: true }
       );
+      const { data } = response;
       const { success, message } = data;
       if (success) {
         console.log("Login response:", data);
+        console.log("Response headers:", response.headers);
         console.log("Cookies after login:", document.cookie);
         console.log("React-cookie:", cookies);
         handleSuccess(message);

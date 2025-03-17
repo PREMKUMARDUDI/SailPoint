@@ -34,6 +34,7 @@ app.use(
     credentials: true,
     methods: ["GET", "POST", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"],
+    exposedHeaders: ["Set-Cookie"],
   })
 );
 app.use(bodyParser.json());
