@@ -37,6 +37,7 @@ const Signup = () => {
         { ...inputValue },
         { withCredentials: true }
       );
+      console.log("Signup full response:", response);
       const { data } = response;
       const { success, message } = data;
       if (success) {
@@ -49,11 +50,21 @@ const Signup = () => {
           window.location.href = `${DASHBOARD_URL}`;
         }, 1000);
       } else {
+        console.log("Signup failed with message:", message);
         handleError(message);
       }
     } catch (error) {
-      console.error("Signup error:", error.response || error.message);
-      handleError("An error occurred during signup");
+      console.error("Signup request failed:", {
+        message: error.message,
+        response: error.response?.data,
+        status: error.response?.status,
+        headers: error.response?.headers,
+        code: error.code,
+      });
+      handleError(
+        "An error occurred during signup: " +
+          (error.response?.data?.message || error.message)
+      );
     }
     setInputValue({ email: "", password: "", username: "" });
   };

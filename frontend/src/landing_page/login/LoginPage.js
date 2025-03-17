@@ -34,8 +34,9 @@ const Login = () => {
       const response = await axios.post(
         `${BACKEND_URL}/login`,
         { ...inputValue },
-        { withCredentials: true }
+        { withCredentials: true, timeout: 30000 }
       );
+      console.log("Login full response:", response);
       const { data } = response;
       const { success, message } = data;
       if (success) {
@@ -48,11 +49,21 @@ const Login = () => {
           window.location.href = `${DASHBOARD_URL}`;
         }, 1000);
       } else {
+        console.log("Login failed with message:", message);
         handleError(message);
       }
     } catch (error) {
-      console.error("Login error:", error.response || error.message);
-      handleError("An error occurred during login");
+      console.error("Login request failed:", {
+        message: error.message,
+        response: error.response?.data,
+        status: error.response?.status,
+        headers: error.response?.headers,
+        code: error.code, // e.g., ECONNABORTED for timeout
+      });
+      handleError(
+        "An error occurred during login: " +
+          (error.response?.data?.message || error.message)
+      );
     }
     setInputValue({ email: "", password: "" });
   };
