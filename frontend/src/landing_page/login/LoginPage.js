@@ -35,12 +35,10 @@ const Login = () => {
       const response = await axios.post(
         `${BACKEND_URL}/login`,
         { ...inputValue },
-        { withCredentials: true, timeout: 60000 }
+        { withCredentials: false }
       );
-      console.log("Login response:", response.data);
-      console.log("Set-Cookie header:", response.headers["set-cookie"]);
-      console.log("Current cookies:", cookies);
       if (response.data.success) {
+        localStorage.setItem("token", data.token);
         handleSuccess(response.data.message);
         setTimeout(() => {
           window.location.href = DASHBOARD_URL;

@@ -28,3 +28,17 @@ module.exports.userVerification = (req, res) => {
     }
   });
 };
+
+module.exports.verifyToken = (req, res, next) => {
+  const token = req.body.token; // Token from request body
+  if (!token) {
+    return res.json({ status: false });
+  }
+  jwt.verify(token, process.env.TOKEN_KEY, (err, decoded) => {
+    if (err) {
+      return res.json({ status: false });
+    }
+    req.user = decoded;
+    next();
+  });
+};

@@ -16,8 +16,8 @@ export function AuthProvider({ children }) {
 
   useEffect(() => {
     const verifyUser = async () => {
-      console.log("Dashboard cookies:", cookies);
-      if (!cookies.token) {
+      const token = localStorage.getItem("token");
+      if (!token) {
         console.log("No token in dashboard");
         setIsAuthenticated(false);
         setUser(null);
@@ -27,9 +27,9 @@ export function AuthProvider({ children }) {
 
       try {
         const { data } = await axios.post(
-          BACKEND_URL,
-          {},
-          { withCredentials: true, timeout: 60000 }
+          `${BACKEND_URL}/verify`,
+          { token },
+          { withCredentials: false }
         );
         console.log("Dashboard verification response:", data);
         if (data.status) {
