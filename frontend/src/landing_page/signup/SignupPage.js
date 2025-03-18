@@ -32,34 +32,30 @@ const Signup = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      console.log("Sending signup request to:", BACKEND_URL);
+      console.log("Signup request URL:", BACKEND_URL);
       const response = await axios.post(
         `${BACKEND_URL}/signup`,
         { ...inputValue },
         { withCredentials: true, timeout: 30000 }
       );
-      console.log("Signup raw response:", response);
+      console.log("Signup response:", response.data);
+      console.log("Set-Cookie header:", response.headers["set-cookie"]);
+      console.log("Current cookies:", cookies);
       const { data } = response;
-      console.log("Signup data:", data);
       const { success, message } = data;
       if (success) {
-        console.log("Signup successful, headers:", response.headers);
-        console.log("Cookies post-signup:", cookies);
         handleSuccess(message);
         setTimeout(() => {
           window.location.href = DASHBOARD_URL;
         }, 1000);
       } else {
-        console.log("Signup failed:", data.message);
-        handleError(data.message);
+        handleError(message);
       }
     } catch (error) {
-      console.error("Signup error details:", {
+      console.error("Signup error:", {
         message: error.message,
         response: error.response?.data,
         status: error.response?.status,
-        headers: error.response?.headers,
-        code: error.code,
       });
       handleError(
         "Signup failed: " + (error.response?.data?.message || error.message)

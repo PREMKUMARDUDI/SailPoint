@@ -31,34 +31,28 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      console.log("Sending login request to:", BACKEND_URL);
+      console.log("Login request URL:", BACKEND_URL);
       const response = await axios.post(
         `${BACKEND_URL}/login`,
         { ...inputValue },
         { withCredentials: true, timeout: 30000 }
       );
-      console.log("Login raw response:", response);
-      const { data } = response;
-      console.log("Login data:", data);
-      const { success, message } = data;
-      if (success) {
-        console.log("Login successful, headers:", response.headers);
-        console.log("Cookies post-login:", cookies);
-        handleSuccess(message);
+      console.log("Login response:", response.data);
+      console.log("Set-Cookie header:", response.headers["set-cookie"]);
+      console.log("Current cookies:", cookies);
+      if (response.data.success) {
+        handleSuccess(response.data.message);
         setTimeout(() => {
           window.location.href = DASHBOARD_URL;
         }, 1000);
       } else {
-        console.log("Login failed with message:", message);
-        handleError(message);
+        handleError(response.data.message);
       }
     } catch (error) {
-      console.error("Login error details:", {
+      console.error("Login error:", {
         message: error.message,
         response: error.response?.data,
         status: error.response?.status,
-        headers: error.response?.headers,
-        code: error.code,
       });
       handleError(
         "Login failed: " + (error.response?.data?.message || error.message)

@@ -26,7 +26,6 @@ export function AuthProvider({ children }) {
       }
 
       try {
-        console.log("Verifying token at:", BACKEND_URL);
         const { data } = await axios.post(
           `${BACKEND_URL}/`,
           {},
@@ -43,7 +42,7 @@ export function AuthProvider({ children }) {
         }
       } catch (error) {
         console.error(
-          "Dashboard auth error:",
+          "Dashboard verification error:",
           error.response?.data || error.message
         );
         setIsAuthenticated(false);
