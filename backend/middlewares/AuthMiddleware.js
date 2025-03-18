@@ -38,7 +38,7 @@ module.exports.verifyToken = (req, res, next) => {
     if (err) {
       return res.json({ status: false });
     }
-    req.user = decoded;
+    res.json({ status: true, user: decoded });
     next();
   });
 };

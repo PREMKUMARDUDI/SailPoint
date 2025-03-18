@@ -59,6 +59,7 @@ const connectDB = async () => {
         socketTimeoutMS: 90000,
       });
       console.log("DB started");
+      await UsersModel.createIndexes({ email: 1 });
     } catch (error) {
       console.error("DB connection error:", error.message);
       if (retries < maxRetries) {
@@ -179,6 +180,6 @@ app.delete("/deleteAllOrders", async (req, res) => {
 
 connectDB().then(() => {
   app.listen(port, () => {
-    console.log(`App started on port ${PORT}`);
+    console.log(`App started on port ${port}`);
   });
 });

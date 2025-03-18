@@ -36,7 +36,7 @@ const Signup = () => {
       const response = await axios.post(
         `${BACKEND_URL}/signup`,
         { ...inputValue },
-        { withCredentials: false }
+        { withCredentials: false, timeout: 60000 }
       );
       const { data } = response;
       const { success, message } = data;

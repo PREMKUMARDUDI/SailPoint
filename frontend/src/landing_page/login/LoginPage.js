@@ -35,10 +35,12 @@ const Login = () => {
       const response = await axios.post(
         `${BACKEND_URL}/login`,
         { ...inputValue },
-        { withCredentials: false }
+        { withCredentials: false, timeout: 60000 }
       );
       if (response.data.success) {
+        console.log("Token received:", response.data.token);
         localStorage.setItem("token", response.data.token);
+        console.log("Token stored:", localStorage.getItem("token"));
         handleSuccess(response.data.message);
         setTimeout(() => {
           window.location.href = DASHBOARD_URL;
