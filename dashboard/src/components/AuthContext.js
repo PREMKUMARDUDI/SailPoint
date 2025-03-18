@@ -21,15 +21,12 @@ export function AuthProvider({ children }) {
         console.log("No token in dashboard");
         setIsAuthenticated(false);
         setUser(null);
-        setTimeout(() => {
-          // Delay redirect
-          window.location.href = FRONTEND_URL;
-        }, 500);
+        window.location.href = FRONTEND_URL;
         return;
       }
 
       try {
-        console.log("Verifying token:", cookies.token);
+        console.log("Verifying token at:", BACKEND_URL);
         const { data } = await axios.post(
           `${BACKEND_URL}/`,
           {},
@@ -45,13 +42,16 @@ export function AuthProvider({ children }) {
           window.location.href = FRONTEND_URL; // Redirect if token invalid
         }
       } catch (error) {
-        console.error("Auth error:", error.response || error.message);
+        console.error(
+          "Dashboard auth error:",
+          error.response?.data || error.message
+        );
         setIsAuthenticated(false);
         setUser(null);
         window.location.href = FRONTEND_URL; // Redirect on error
       }
     };
-    setTimeout(verifyUser, 100);
+    verifyUser();
   }, [cookies]);
 
   const logout = () => {

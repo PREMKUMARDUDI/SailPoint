@@ -31,48 +31,37 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      console.log("Sending login request to:", BACKEND_URL);
       const response = await axios.post(
         `${BACKEND_URL}/login`,
         { ...inputValue },
         { withCredentials: true, timeout: 30000 }
       );
-      console.log("Login full response:", response);
+      console.log("Login raw response:", response);
       const { data } = response;
+      console.log("Login data:", data);
       const { success, message } = data;
       if (success) {
-        console.log("Login response:", data);
-        console.log("Response headers:", response.headers);
-        console.log("Cookies after login:", document.cookie);
-        console.log("React-cookie before sync:", cookies);
-        const setCookieHeader = response.headers["set-cookie"];
-        if (setCookieHeader) {
-          const token = setCookieHeader[0].split(";")[0].split("=")[1];
-          setCookie("token", token, {
-            path: "/",
-            secure: true,
-            sameSite: "none",
-          });
-        }
-        console.log("React-cookie after sync:", cookies);
+        console.log("Login successful, headers:", response.headers);
+        console.log("Cookies post-login:", cookies);
         handleSuccess(message);
         setTimeout(() => {
-          window.location.href = `${DASHBOARD_URL}`;
+          window.location.href = DASHBOARD_URL;
         }, 1000);
       } else {
         console.log("Login failed with message:", message);
         handleError(message);
       }
     } catch (error) {
-      console.error("Login request failed:", {
+      console.error("Login error details:", {
         message: error.message,
         response: error.response?.data,
         status: error.response?.status,
         headers: error.response?.headers,
-        code: error.code, // e.g., ECONNABORTED for timeout
+        code: error.code,
       });
       handleError(
-        "An error occurred during login: " +
-          (error.response?.data?.message || error.message)
+        "Login failed: " + (error.response?.data?.message || error.message)
       );
     }
     setInputValue({ email: "", password: "" });

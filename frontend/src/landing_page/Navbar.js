@@ -16,7 +16,7 @@ function Navbar() {
 
   useEffect(() => {
     const verifyUser = async () => {
-      console.log("Cookies in useEffect:", cookies);
+      console.log("Navbar cookies:", cookies);
 
       if (!cookies.token) {
         console.log("No token found in cookies");
@@ -26,17 +26,20 @@ function Navbar() {
       }
 
       try {
-        console.log("Verifying token:", cookies.token);
-        const { data } = await axios.post(
+        console.log("Verifying token at:", BACKEND_URL);
+        const response = await axios.post(
           `${BACKEND_URL}/`,
           {},
           { withCredentials: true }
         );
-        console.log("Verification response:", data);
-        setIsAuthenticated(data.status);
-        localStorage.setItem("isAuthenticated", data.status); // Cache result
+        console.log("Verification response:", response.data);
+        setIsAuthenticated(response.data.status);
+        localStorage.setItem("isAuthenticated", response.data.status);
       } catch (error) {
-        console.error("Verification failed:", error.response || error.message);
+        console.error(
+          "Verification error:",
+          error.response?.data || error.message
+        );
         setIsAuthenticated(false);
         localStorage.setItem("isAuthenticated", "false");
       }

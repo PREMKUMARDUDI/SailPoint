@@ -32,39 +32,29 @@ const Signup = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      console.log("Sending signup request to:", BACKEND_URL);
       const response = await axios.post(
         `${BACKEND_URL}/signup`,
         { ...inputValue },
-        { withCredentials: true }
+        { withCredentials: true, timeout: 30000 }
       );
-      console.log("Signup full response:", response);
+      console.log("Signup raw response:", response);
       const { data } = response;
+      console.log("Signup data:", data);
       const { success, message } = data;
       if (success) {
-        console.log("Signup response:", data);
-        console.log("Response headers:", response.headers);
-        console.log("Cookies after signup:", document.cookie);
-        console.log("React-cookie before sync:", cookies);
-        const setCookieHeader = response.headers["set-cookie"];
-        if (setCookieHeader) {
-          const token = setCookieHeader[0].split(";")[0].split("=")[1];
-          setCookie("token", token, {
-            path: "/",
-            secure: true,
-            sameSite: "none",
-          });
-        }
-        console.log("React-cookie after sync:", cookies);
+        console.log("Signup successful, headers:", response.headers);
+        console.log("Cookies post-signup:", cookies);
         handleSuccess(message);
         setTimeout(() => {
-          window.location.href = `${DASHBOARD_URL}`;
+          window.location.href = DASHBOARD_URL;
         }, 1000);
       } else {
-        console.log("Signup failed with message:", message);
-        handleError(message);
+        console.log("Signup failed:", data.message);
+        handleError(data.message);
       }
     } catch (error) {
-      console.error("Signup request failed:", {
+      console.error("Signup error details:", {
         message: error.message,
         response: error.response?.data,
         status: error.response?.status,
@@ -72,8 +62,7 @@ const Signup = () => {
         code: error.code,
       });
       handleError(
-        "An error occurred during signup: " +
-          (error.response?.data?.message || error.message)
+        "Signup failed: " + (error.response?.data?.message || error.message)
       );
     }
     setInputValue({ email: "", password: "", username: "" });
