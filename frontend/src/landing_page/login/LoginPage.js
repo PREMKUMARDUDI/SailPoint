@@ -35,7 +35,7 @@ const Login = () => {
       const response = await axios.post(
         `${BACKEND_URL}/login`,
         { ...inputValue },
-        { withCredentials: true, timeout: 30000 }
+        { withCredentials: true, timeout: 60000 }
       );
       console.log("Login response:", response.data);
       console.log("Set-Cookie header:", response.headers["set-cookie"]);

@@ -36,7 +36,7 @@ const Signup = () => {
       const response = await axios.post(
         `${BACKEND_URL}/signup`,
         { ...inputValue },
-        { withCredentials: true, timeout: 30000 }
+        { withCredentials: true, timeout: 60000 }
       );
       console.log("Signup response:", response.data);
       console.log("Set-Cookie header:", response.headers["set-cookie"]);

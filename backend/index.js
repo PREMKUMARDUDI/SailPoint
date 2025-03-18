@@ -13,8 +13,8 @@ const { HoldingsModel } = require("./model/HoldingsModel");
 const { PositionsModel } = require("./model/PositionsModel");
 const { OrdersModel } = require("./model/OrdersModel");
 
-const PORT = process.env.PORT || 3002;
-const URL = process.env.MONGO_URL;
+const port = process.env.PORT || 3002;
+const mongoUrl = process.env.MONGO_URL;
 
 // Global error handlers
 process.on("uncaughtException", (err) => {
@@ -53,7 +53,7 @@ const connectDB = async () => {
         console.log("DB already connected, skipping attempt");
         return; // Skip if already connected
       }
-      await mongoose.connect(URL, {
+      await mongoose.connect(mongoUrl, {
         serverSelectionTimeoutMS: 60000,
         connectTimeoutMS: 60000,
         socketTimeoutMS: 90000,
@@ -178,7 +178,7 @@ app.delete("/deleteAllOrders", async (req, res) => {
 });
 
 connectDB().then(() => {
-  app.listen(PORT, () => {
+  app.listen(port, () => {
     console.log(`App started on port ${PORT}`);
   });
 });

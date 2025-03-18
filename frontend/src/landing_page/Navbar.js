@@ -28,9 +28,9 @@ function Navbar() {
       try {
         console.log("Verifying token at:", BACKEND_URL);
         const response = await axios.post(
-          `${BACKEND_URL}/`,
+          BACKEND_URL,
           {},
-          { withCredentials: true }
+          { withCredentials: true, timeout: 60000 }
         );
         console.log("Verification response:", response.data);
         setIsAuthenticated(response.data.status);
@@ -50,7 +50,7 @@ function Navbar() {
   const handleDashboardClick = (e) => {
     e.preventDefault();
     if (isAuthenticated) {
-      window.location.href = `${DASHBOARD_URL}/`;
+      window.location.href = DASHBOARD_URL;
     } else {
       navigate("/signup", { state: { fromDashboard: true } });
     }

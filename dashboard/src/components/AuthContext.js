@@ -27,9 +27,9 @@ export function AuthProvider({ children }) {
 
       try {
         const { data } = await axios.post(
-          `${BACKEND_URL}/`,
+          BACKEND_URL,
           {},
-          { withCredentials: true }
+          { withCredentials: true, timeout: 60000 }
         );
         console.log("Dashboard verification response:", data);
         if (data.status) {
