@@ -36,6 +36,7 @@ export function AuthProvider({ children }) {
           console.log("Dashboard: User authenticated successfully");
           setIsAuthenticated(true);
           setUser(data.user);
+          setIsLoading(false); // Only set loading false after success
         } else {
           console.log("Dashboard: Verification failed, clearing token...");
           localStorage.removeItem("token");
@@ -44,13 +45,15 @@ export function AuthProvider({ children }) {
           window.location.href = FRONTEND_URL;
         }
       } catch (error) {
-        console.error("Dashboard: Verification error:", error.message);
+        console.error(
+          "Dashboard: Verification error:",
+          error.message,
+          error.response?.data
+        );
         localStorage.removeItem("token");
         setIsAuthenticated(false);
         setUser(null);
         window.location.href = FRONTEND_URL;
-      } finally {
-        setIsLoading(false);
       }
     };
     verifyUser();
