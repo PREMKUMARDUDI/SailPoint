@@ -15,31 +15,35 @@ export function AuthProvider({ children }) {
   useEffect(() => {
     const verifyUser = async () => {
       const token = localStorage.getItem("token");
-      console.log("Token retrieved:", token);
+      console.log("Dashboard: Token retrieved:", token);
       if (!token) {
-        console.log("No token found, redirecting...");
+        console.log("Dashboard: No token, redirecting...");
         window.location.href = FRONTEND_URL;
         return;
       }
 
       try {
-        console.log("Verifying token at:", `${BACKEND_URL}/verify`);
+        console.log("Dashboard: Verifying token at:", `${BACKEND_URL}/verify`);
         const { data } = await axios.post(
           `${BACKEND_URL}/verify`,
           { token },
           { withCredentials: false, timeout: 60000 }
         );
-        console.log("Verification response:", data);
+        console.log("Dashboard: Verification response:", data);
         if (data.status) {
           setIsAuthenticated(true);
           setUser(data.user);
         } else {
-          console.log("Verification failed, redirecting...");
+          console.log("Dashboard: Invalid token, redirecting...");
           localStorage.removeItem("token");
           window.location.href = FRONTEND_URL;
         }
       } catch (error) {
-        console.error("Verification error:", error.message);
+        console.error(
+          "Dashboard: Verification error:",
+          error.message,
+          error.response?.data
+        );
         localStorage.removeItem("token");
         window.location.href = FRONTEND_URL;
       } finally {
@@ -57,7 +61,7 @@ export function AuthProvider({ children }) {
   };
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <div>Loading dashboard...</div>;
   }
 
   return (
