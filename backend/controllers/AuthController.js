@@ -16,14 +16,7 @@ module.exports.Signup = async (req, res, next) => {
       createdAt,
     });
     const token = createSecretToken(user._id);
-    res.cookie("token", token, {
-      httpOnly: true, // Allow frontend access
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "None",
-      path: "/",
-    });
-    console.log("Signup: Token set:", token);
-    console.log("Signup: Response headers:", res.getHeaders());
+    console.log("Signup success, sending token:", token);
     res.status(201).json({
       message: "User signed in successfully",
       success: true,
@@ -56,15 +49,7 @@ module.exports.Login = async (req, res, next) => {
       return res.status(401).json({ message: "Incorrect password" });
     }
     const token = createSecretToken(user._id);
-    console.log("Login success, sending token");
-    res.cookie("token", token, {
-      httpOnly: true, // Allow frontend access
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "none",
-      path: "/",
-    });
-    console.log("Login: Token set:", token);
-    console.log("Login: Response headers:", res.getHeaders());
+    console.log("Login success, sending token:", token);
     res.status(201).json({
       message: "User logged in successfully",
       success: true,

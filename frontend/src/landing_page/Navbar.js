@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
-import { useCookies } from "react-cookie";
 import axios from "axios";
 
 const BACKEND_URL =
@@ -9,43 +8,40 @@ const DASHBOARD_URL =
   process.env.REACT_APP_DASHBOARD_URL || "http://localhost:3001";
 
 function Navbar() {
-  const [cookies, , removeCookie] = useCookies(["token"]);
   const navigate = useNavigate();
   const location = useLocation();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
     const verifyUser = async () => {
-      console.log("Navbar cookies:", cookies);
+      const token = localStorage.getItem("token");
+      console.log("Navbar token from localStorage:", token);
 
-      if (!cookies.token) {
-        console.log("No token found in cookies");
+      if (!token) {
+        console.log("No token found in localStorage");
         setIsAuthenticated(false);
         localStorage.setItem("isAuthenticated", "false");
         return;
       }
 
       try {
-        console.log("Verifying token at:", BACKEND_URL);
-        const response = await axios.post(
-          BACKEND_URL,
-          {},
-          { withCredentials: true, timeout: 60000 }
+        console.log("Verifying token at:", `${BACKEND_URL}/verify`);
+        const { data } = await axios.post(
+          `${BACKEND_URL}/verify`,
+          { token },
+          { withCredentials: false, timeout: 60000 }
         );
-        console.log("Verification response:", response.data);
-        setIsAuthenticated(response.data.status);
-        localStorage.setItem("isAuthenticated", response.data.status);
+        console.log("Verification response:", data);
+        setIsAuthenticated(data.status);
+        localStorage.setItem("isAuthenticated", data.status.toString());
       } catch (error) {
-        console.error(
-          "Verification error:",
-          error.response?.data || error.message
-        );
+        console.error("Verification error:", error.message);
         setIsAuthenticated(false);
         localStorage.setItem("isAuthenticated", "false");
       }
     };
     verifyUser();
-  }, [cookies, location]);
+  }, [location]);
 
   const handleDashboardClick = (e) => {
     e.preventDefault();
