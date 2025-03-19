@@ -6,6 +6,8 @@ const BACKEND_URL =
   process.env.REACT_APP_BACKEND_URL || "http://localhost:3002";
 const FRONTEND_URL =
   process.env.REACT_APP_FRONTEND_URL || "http://localhost:3000";
+const DASHBOARD_URL =
+  process.env.REACT_APP_DASHBOARD_URL || "http://localhost:3001";
 
 export function AuthProvider({ children }) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
