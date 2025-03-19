@@ -6,8 +6,7 @@ const BACKEND_URL =
   process.env.REACT_APP_BACKEND_URL || "http://localhost:3002";
 const FRONTEND_URL =
   process.env.REACT_APP_FRONTEND_URL || "http://localhost:3000";
-const DASHBOARD_URL =
-  process.env.REACT_APP_DASHBOARD_URL || "http://localhost:3001";
+const DASHBOARD_URL = "https://sailpoint-dashboard.onrender.com";
 
 export function AuthProvider({ children }) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -33,8 +32,6 @@ export function AuthProvider({ children }) {
       console.log("Dashboard: Final token used:", token);
       if (!token) {
         console.log("Dashboard: No token found, redirecting...");
-        setIsAuthenticated(false);
-        setUser(null);
         window.location.href = FRONTEND_URL;
         return;
       }
@@ -57,8 +54,6 @@ export function AuthProvider({ children }) {
         } else {
           console.log("Dashboard: Verification failed, clearing token...");
           localStorage.removeItem("token");
-          setIsAuthenticated(false);
-          setUser(null);
           window.location.href = FRONTEND_URL;
         }
       } catch (error) {
@@ -68,28 +63,43 @@ export function AuthProvider({ children }) {
           error.response?.data
         );
         localStorage.removeItem("token");
-        setIsAuthenticated(false);
-        setUser(null);
         window.location.href = FRONTEND_URL;
       }
     };
     verifyUser();
   }, []);
 
-  const logout = () => {
-    localStorage.removeItem("token");
-    setIsAuthenticated(false);
-    setUser(null);
-    window.location.href = FRONTEND_URL;
-  };
+  console.log(
+    "Dashboard: Rendering with isAuthenticated:",
+    isAuthenticated,
+    "isLoading:",
+    isLoading
+  );
 
   if (isLoading) {
     return <div>Loading Dashboard...</div>;
   }
 
+  if (!isAuthenticated) {
+    console.log("Dashboard: Not authenticated, should have redirected earlier");
+    return null;
+  }
+
+  console.log("Dashboard: Rendering children");
   return (
-    <AuthContext.Provider value={{ isAuthenticated, user, logout }}>
-      {isAuthenticated ? children : null}
+    <AuthContext.Provider
+      value={{
+        isAuthenticated,
+        user,
+        logout: () => {
+          localStorage.removeItem("token");
+          setIsAuthenticated(false);
+          setUser(null);
+          window.location.href = FRONTEND_URL;
+        },
+      }}
+    >
+      {children}
     </AuthContext.Provider>
   );
 }
