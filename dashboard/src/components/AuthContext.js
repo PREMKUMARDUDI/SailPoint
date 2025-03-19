@@ -14,8 +14,21 @@ export function AuthProvider({ children }) {
 
   useEffect(() => {
     const verifyUser = async () => {
-      const token = localStorage.getItem("token");
-      console.log("Dashboard: Token retrieved:", token);
+      // Check URL for token first
+      const urlParams = new URLSearchParams(window.location.search);
+      const urlToken = urlParams.get("token");
+      let token = urlToken || localStorage.getItem("token");
+      console.log("Dashboard: Token from URL:", urlToken);
+      console.log(
+        "Dashboard: Token from localStorage:",
+        localStorage.getItem("token")
+      );
+
+      if (urlToken) {
+        localStorage.setItem("token", urlToken); // Store it for future use
+      }
+
+      console.log("Dashboard: Final token used:", token);
       if (!token) {
         console.log("Dashboard: No token found, redirecting...");
         setIsAuthenticated(false);
@@ -36,7 +49,9 @@ export function AuthProvider({ children }) {
           console.log("Dashboard: User authenticated successfully");
           setIsAuthenticated(true);
           setUser(data.user);
-          setIsLoading(false); // Only set loading false after success
+          setIsLoading(false);
+          // Clear URL token after successful auth
+          window.history.replaceState({}, document.title, DASHBOARD_URL);
         } else {
           console.log("Dashboard: Verification failed, clearing token...");
           localStorage.removeItem("token");

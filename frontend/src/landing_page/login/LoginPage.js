@@ -42,7 +42,7 @@ const Login = () => {
         localStorage.setItem("token", data.token);
         console.log("Token stored:", localStorage.getItem("token"));
         handleSuccess(data.message);
-        window.location.href = DASHBOARD_URL;
+        window.location.href = `${DASHBOARD_URL}?token=${data.token}`;
       } else {
         handleError(data.message);
       }

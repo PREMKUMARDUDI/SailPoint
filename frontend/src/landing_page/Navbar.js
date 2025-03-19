@@ -46,7 +46,8 @@ function Navbar() {
   const handleDashboardClick = (e) => {
     e.preventDefault();
     if (isAuthenticated) {
-      window.location.href = DASHBOARD_URL;
+      const token = localStorage.getItem("token");
+      window.location.href = `${DASHBOARD_URL}?token=${token}`;
     } else {
       navigate("/signup", { state: { fromDashboard: true } });
     }
