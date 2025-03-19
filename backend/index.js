@@ -30,13 +30,10 @@ app.use(
     origin: [
       "https://sailpoint-frontend.onrender.com",
       "https://sailpoint-dashboard.onrender.com",
-      // "http://localhost:3000/",
-      // "http://localhost:3001/",
     ],
     credentials: true,
     methods: ["GET", "POST", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"],
-    exposedHeaders: ["Set-Cookie"],
   })
 );
 app.use((req, res, next) => {
