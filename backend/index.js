@@ -39,6 +39,10 @@ app.use(
     exposedHeaders: ["Set-Cookie"],
   })
 );
+app.use((req, res, next) => {
+  console.log(`${req.method} request to ${req.path}`);
+  next();
+});
 app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(express.json());
