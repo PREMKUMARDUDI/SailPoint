@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { useCookies } from "react-cookie";
 
 const BACKEND_URL =
   process.env.REACT_APP_BACKEND_URL || "http://localhost:3002";
@@ -11,7 +10,6 @@ const DASHBOARD_URL =
   process.env.REACT_APP_DASHBOARD_URL || "http://localhost:3001";
 
 const Login = () => {
-  const [cookies, setCookie] = useCookies(["token"]);
   const [inputValue, setInputValue] = useState({
     email: "",
     password: "",
@@ -31,7 +29,7 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      console.log("Login request URL:", BACKEND_URL);
+      console.log("Sending login request to:", BACKEND_URL);
       const response = await axios.post(
         `${BACKEND_URL}/login`,
         { ...inputValue },

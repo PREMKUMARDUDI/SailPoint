@@ -27,6 +27,7 @@ export function AuthProvider({ children }) {
       }
 
       try {
+        console.log("Verifying token at:", BACKEND_URL);
         const { data } = await axios.post(
           `${BACKEND_URL}/verify`,
           { token },
@@ -37,15 +38,14 @@ export function AuthProvider({ children }) {
           setIsAuthenticated(true);
           setUser(data.user);
         } else {
+          localStorage.removeItem("token");
           setIsAuthenticated(false);
           setUser(null);
           window.location.href = FRONTEND_URL; // Redirect if token invalid
         }
       } catch (error) {
-        console.error(
-          "Dashboard verification error:",
-          error.response?.data || error.message
-        );
+        console.error("Verification error:", error.message);
+        localStorage.removeItem("token");
         setIsAuthenticated(false);
         setUser(null);
         window.location.href = FRONTEND_URL; // Redirect on error

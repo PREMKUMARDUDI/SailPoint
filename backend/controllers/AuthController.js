@@ -39,18 +39,24 @@ module.exports.Signup = async (req, res, next) => {
 module.exports.Login = async (req, res, next) => {
   try {
     const { email, password } = req.body;
+    console.log("Login request received:", { email });
     if (!email || !password) {
       return res.json({ message: "All fields are required" });
     }
+    console.time("Find user");
     const user = await UsersModel.findOne({ email }).lean();
+    console.timeEnd("Find user");
     if (!user) {
-      return res.json({ message: "Incorrect password or email" });
+      return res.status(404).json({ message: "Incorrect password or email" });
     }
+    console.time("Bcrypt compare");
     const auth = await bcrypt.compare(password, user.password);
+    console.timeEnd("Bcrypt compare");
     if (!auth) {
-      return res.json({ message: "Incorrect password or email" });
+      return res.status(401).json({ message: "Incorrect password" });
     }
     const token = createSecretToken(user._id);
+    console.log("Login success, sending token");
     res.cookie("token", token, {
       httpOnly: true, // Allow frontend access
       secure: process.env.NODE_ENV === "production",
@@ -66,7 +72,7 @@ module.exports.Login = async (req, res, next) => {
     });
     next();
   } catch (error) {
-    console.error(error);
+    console.error("Login error:", error.message);
     res.status(500).json({ message: "Server error" });
   }
 };
