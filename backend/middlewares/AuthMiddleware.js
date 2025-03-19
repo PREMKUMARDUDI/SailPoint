@@ -26,17 +26,17 @@ module.exports.userVerification = (req, res) => {
 
 module.exports.verifyToken = (req, res, next) => {
   const token = req.body.token;
-  console.log("Verify request received with token:", token);
+  console.log("Verifying token:", token);
   if (!token) {
+    console.log("No token provided in verify request");
     return res.json({ status: false });
   }
   jwt.verify(token, process.env.TOKEN_KEY, (err, decoded) => {
     if (err) {
-      console.error("Token verification failed:", err.message);
+      console.log("Token verification failed:", err.message);
       return res.json({ status: false });
     }
     req.user = decoded;
-    console.log("Token verified successfully:", decoded);
     next();
   });
 };

@@ -32,26 +32,22 @@ const Login = () => {
       console.log("Sending login request to:", BACKEND_URL);
       const response = await axios.post(
         `${BACKEND_URL}/login`,
-        { ...inputValue },
+        { email, password },
         { withCredentials: false, timeout: 60000 }
       );
-      if (response.data.success) {
-        console.log("Token received:", response.data.token);
-        localStorage.setItem("token", response.data.token);
+      const { data } = response;
+      console.log("Login response:", data);
+      if (data.success) {
+        console.log("Token received:", data.token);
+        localStorage.setItem("token", data.token);
         console.log("Token stored:", localStorage.getItem("token"));
-        handleSuccess(response.data.message);
-        setTimeout(() => {
-          window.location.href = DASHBOARD_URL;
-        }, 1000);
+        handleSuccess(data.message);
+        window.location.href = DASHBOARD_URL;
       } else {
-        handleError(response.data.message);
+        handleError(data.message);
       }
     } catch (error) {
-      console.error("Login error:", {
-        message: error.message,
-        response: error.response?.data,
-        status: error.response?.status,
-      });
+      console.error("Login error:", error.message);
       handleError(
         "Login failed: " + (error.response?.data?.message || error.message)
       );

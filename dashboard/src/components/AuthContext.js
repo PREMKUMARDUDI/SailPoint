@@ -17,7 +17,9 @@ export function AuthProvider({ children }) {
       const token = localStorage.getItem("token");
       console.log("Dashboard: Token retrieved:", token);
       if (!token) {
-        console.log("Dashboard: No token, redirecting to frontend");
+        console.log("Dashboard: No token found, redirecting...");
+        setIsAuthenticated(false);
+        setUser(null);
         window.location.href = FRONTEND_URL;
         return;
       }
@@ -29,26 +31,23 @@ export function AuthProvider({ children }) {
           { token },
           { withCredentials: false, timeout: 60000 }
         );
-        console.log(
-          "Dashboard: Verification response:",
-          JSON.stringify(data, null, 2)
-        );
+        console.log("Dashboard: Verification response:", data);
         if (data.status) {
+          console.log("Dashboard: User authenticated successfully");
           setIsAuthenticated(true);
           setUser(data.user);
-          console.log("Dashboard: User authenticated successfully");
         } else {
-          console.log("Dashboard: Verification failed, redirecting");
+          console.log("Dashboard: Verification failed, clearing token...");
           localStorage.removeItem("token");
+          setIsAuthenticated(false);
+          setUser(null);
           window.location.href = FRONTEND_URL;
         }
       } catch (error) {
-        console.error(
-          "Dashboard: Verification error:",
-          error.message,
-          error.response?.data
-        );
+        console.error("Dashboard: Verification error:", error.message);
         localStorage.removeItem("token");
+        setIsAuthenticated(false);
+        setUser(null);
         window.location.href = FRONTEND_URL;
       } finally {
         setIsLoading(false);
@@ -65,7 +64,7 @@ export function AuthProvider({ children }) {
   };
 
   if (isLoading) {
-    return <div>{"  "}Loading dashboard...</div>;
+    return <div>Loading Dashboard...</div>;
   }
 
   return (

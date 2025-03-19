@@ -9,8 +9,16 @@ router.post("/signup", Signup);
 router.post("/login", Login);
 router.post("/", userVerification);
 
-router.post("/verify", verifyToken, (req, res) => {
-  res.json({ status: true, user: req.user });
-});
+router.post(
+  "/verify",
+  (req, res, next) => {
+    console.log("Verify request received:", req.body);
+    verifyToken(req, res, next);
+  },
+  (req, res) => {
+    console.log("Verify response sent:", { status: true, user: req.user });
+    res.json({ status: true, user: req.user });
+  }
+);
 
 module.exports = router;
