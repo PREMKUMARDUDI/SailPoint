@@ -1,5 +1,4 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useContext } from "react";
 import axios from "axios";
 import GeneralContext from "./GeneralContext";
 import "./BuyActionWindow.css";
@@ -10,6 +9,7 @@ const BACKEND_URL =
 const BuyActionWindow = ({ uid }) => {
   const [stockQuantity, setStockQuantity] = useState(1);
   const [stockPrice, setStockPrice] = useState(0.0);
+  const { closeBuyWindow } = useContext(GeneralContext); // Access context
 
   const handleBuyClick = async () => {
     try {
@@ -26,7 +26,7 @@ const BuyActionWindow = ({ uid }) => {
         mode: "BUY",
       });
       console.log("Buy response:", response.data);
-      GeneralContext.closeBuyWindow();
+      closeBuyWindow(); // Use context method
     } catch (error) {
       console.error("Error buying stock:", error.message, error.response?.data);
       alert(`Failed to buy stock: ${error.message}. Please try again.`);
@@ -34,7 +34,7 @@ const BuyActionWindow = ({ uid }) => {
   };
 
   const handleCancelClick = () => {
-    GeneralContext.closeBuyWindow();
+    closeBuyWindow(); // Use context method
   };
 
   return (
@@ -67,9 +67,9 @@ const BuyActionWindow = ({ uid }) => {
       <div className="buttons">
         <span>Margin required ₹140.65</span>
         <div>
-          <Link className="btn btn-blue" onClick={handleBuyClick}>
+          <button className="btn btn-blue" onClick={handleBuyClick}>
             Buy
-          </Link>
+          </button>
           <button className="btn btn-grey" onClick={handleCancelClick}>
             Cancel
           </button>
