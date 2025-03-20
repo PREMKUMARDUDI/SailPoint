@@ -23,6 +23,7 @@ const Dashboard = () => {
             <Route path="/orders" element={<Orders />} />
             <Route path="/positions" element={<Positions />} />
             <Route path="/funds" element={<Funds />} />
+            <Route path="*" element={<Summary />} />
           </Routes>
         </HoldingsProvider>
       </div>

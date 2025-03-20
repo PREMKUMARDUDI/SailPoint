@@ -13,17 +13,27 @@ const SellActionWindow = ({ uid }) => {
 
   const handleSellClick = async () => {
     try {
+      console.log("Sending sell request to:", `${BACKEND_URL}/newSellOrder`, {
+        name: uid,
+        qty: stockQuantity,
+        price: stockPrice,
+        mode: "Sell",
+      });
       const response = await axios.post(`${BACKEND_URL}/newSellOrder`, {
         name: uid,
         qty: stockQuantity,
         price: stockPrice,
         mode: "Sell",
       });
-      console.log("Buy response:", response.data);
+      console.log("Sell response:", response.data);
       GeneralContext.closeSellWindow();
     } catch (error) {
-      console.error("Error selling stock:", error.message);
-      alert("Failed to sell stock. Please try again.");
+      console.error(
+        "Error selling stock:",
+        error.message,
+        error.response?.data
+      );
+      alert(`Failed to sell stock: ${error.message}. Please try again.`);
     }
   };
 
@@ -58,16 +68,15 @@ const SellActionWindow = ({ uid }) => {
           </fieldset>
         </div>
       </div>
-
       <div className="buttons">
         <span>Margin required ₹140.65</span>
         <div>
           <Link className="btn btn-blue" onClick={handleSellClick}>
             Sell
           </Link>
-          <Link to="" className="btn btn-grey" onClick={handleCancelClick}>
+          <button className="btn btn-grey" onClick={handleCancelClick}>
             Cancel
-          </Link>
+          </button>
         </div>
       </div>
     </div>

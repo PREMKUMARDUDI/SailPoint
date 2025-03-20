@@ -13,6 +13,12 @@ const BuyActionWindow = ({ uid }) => {
 
   const handleBuyClick = async () => {
     try {
+      console.log("Sending buy request to:", `${BACKEND_URL}/newBuyOrder`, {
+        name: uid,
+        qty: stockQuantity,
+        price: stockPrice,
+        mode: "BUY",
+      });
       const response = await axios.post(`${BACKEND_URL}/newBuyOrder`, {
         name: uid,
         qty: stockQuantity,
@@ -22,8 +28,8 @@ const BuyActionWindow = ({ uid }) => {
       console.log("Buy response:", response.data);
       GeneralContext.closeBuyWindow();
     } catch (error) {
-      console.error("Error buying stock:", error.message);
-      alert("Failed to buy stock. Please try again.");
+      console.error("Error buying stock:", error.message, error.response?.data);
+      alert(`Failed to buy stock: ${error.message}. Please try again.`);
     }
   };
 
@@ -58,16 +64,15 @@ const BuyActionWindow = ({ uid }) => {
           </fieldset>
         </div>
       </div>
-
       <div className="buttons">
         <span>Margin required ₹140.65</span>
         <div>
           <Link className="btn btn-blue" onClick={handleBuyClick}>
             Buy
           </Link>
-          <Link to="" className="btn btn-grey" onClick={handleCancelClick}>
+          <button className="btn btn-grey" onClick={handleCancelClick}>
             Cancel
-          </Link>
+          </button>
         </div>
       </div>
     </div>
