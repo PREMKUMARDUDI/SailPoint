@@ -11,23 +11,23 @@ import { HoldingsProvider } from "./HoldingsContext";
 
 const Dashboard = () => {
   return (
-    <div className="dashboard-container">
-      <GeneralContextProvider>
+    <GeneralContextProvider>
+      <div className="dashboard-container">
         <WatchList />
-      </GeneralContextProvider>
-      <div className="content">
-        <HoldingsProvider>
-          <Routes>
-            <Route exact path="/" element={<Summary />} />
-            <Route path="/holdings" element={<Holdings />} />
-            <Route path="/orders" element={<Orders />} />
-            <Route path="/positions" element={<Positions />} />
-            <Route path="/funds" element={<Funds />} />
-            <Route path="*" element={<Summary />} />
-          </Routes>
-        </HoldingsProvider>
+        <div className="content">
+          <HoldingsProvider>
+            <Routes>
+              <Route path="/" element={<Summary />} />
+              <Route path="/holdings" element={<Holdings />} />
+              <Route path="/orders" element={<Orders />} />
+              <Route path="/positions" element={<Positions />} />
+              <Route path="/funds" element={<Funds />} />
+              <Route path="*" element={<Summary />} />
+            </Routes>
+          </HoldingsProvider>
+        </div>
       </div>
-    </div>
+    </GeneralContextProvider>
   );
 };
 

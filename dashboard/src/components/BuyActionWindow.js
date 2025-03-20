@@ -9,32 +9,42 @@ const BACKEND_URL =
 const BuyActionWindow = ({ uid }) => {
   const [stockQuantity, setStockQuantity] = useState(1);
   const [stockPrice, setStockPrice] = useState(0.0);
-  const { closeBuyWindow } = useContext(GeneralContext); // Access context
+  const { closeBuyWindow } = useContext(GeneralContext);
 
   const handleBuyClick = async () => {
+    const payload = {
+      name: uid,
+      qty: Number(stockQuantity), // Ensure numeric
+      price: Number(stockPrice), // Ensure numeric
+      mode: "BUY",
+    };
     try {
-      console.log("Sending buy request to:", `${BACKEND_URL}/newBuyOrder`, {
-        name: uid,
-        qty: stockQuantity,
-        price: stockPrice,
-        mode: "BUY",
+      console.log("Sending buy request:", {
+        url: `${BACKEND_URL}/newBuyOrder`,
+        payload,
       });
-      const response = await axios.post(`${BACKEND_URL}/newBuyOrder`, {
-        name: uid,
-        qty: stockQuantity,
-        price: stockPrice,
-        mode: "BUY",
-      });
+      const response = await axios.post(`${BACKEND_URL}/newBuyOrder`, payload);
       console.log("Buy response:", response.data);
-      closeBuyWindow(); // Use context method
+      closeBuyWindow();
     } catch (error) {
-      console.error("Error buying stock:", error.message, error.response?.data);
-      alert(`Failed to buy stock: ${error.message}. Please try again.`);
+      console.error("Buy error:", {
+        message: error.message,
+        status: error.response?.status,
+        data: error.response?.data,
+      });
+      alert(
+        `Failed to buy stock: ${error.message}${
+          error.response?.data?.message
+            ? " - " + error.response.data.message
+            : ""
+        }`
+      );
     }
   };
 
   const handleCancelClick = () => {
-    closeBuyWindow(); // Use context method
+    console.log("Cancel clicked, closing buy window");
+    closeBuyWindow();
   };
 
   return (

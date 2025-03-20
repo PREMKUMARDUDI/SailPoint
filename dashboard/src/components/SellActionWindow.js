@@ -9,36 +9,42 @@ const BACKEND_URL =
 const SellActionWindow = ({ uid }) => {
   const [stockQuantity, setStockQuantity] = useState(1);
   const [stockPrice, setStockPrice] = useState(0.0);
-  const { closeSellWindow } = useContext(GeneralContext); // Access context
+  const { closeSellWindow } = useContext(GeneralContext);
 
   const handleSellClick = async () => {
+    const payload = {
+      name: uid,
+      qty: Number(stockQuantity), // Ensure numeric
+      price: Number(stockPrice), // Ensure numeric
+      mode: "Sell",
+    };
     try {
-      console.log("Sending sell request to:", `${BACKEND_URL}/newSellOrder`, {
-        name: uid,
-        qty: stockQuantity,
-        price: stockPrice,
-        mode: "Sell",
+      console.log("Sending sell request:", {
+        url: `${BACKEND_URL}/newSellOrder`,
+        payload,
       });
-      const response = await axios.post(`${BACKEND_URL}/newSellOrder`, {
-        name: uid,
-        qty: stockQuantity,
-        price: stockPrice,
-        mode: "Sell",
-      });
+      const response = await axios.post(`${BACKEND_URL}/newSellOrder`, payload);
       console.log("Sell response:", response.data);
-      closeSellWindow(); // Use context method
+      closeSellWindow();
     } catch (error) {
-      console.error(
-        "Error selling stock:",
-        error.message,
-        error.response?.data
+      console.error("Sell error:", {
+        message: error.message,
+        status: error.response?.status,
+        data: error.response?.data,
+      });
+      alert(
+        `Failed to sell stock: ${error.message}${
+          error.response?.data?.message
+            ? " - " + error.response.data.message
+            : ""
+        }`
       );
-      alert(`Failed to sell stock: ${error.message}. Please try again.`);
     }
   };
 
   const handleCancelClick = () => {
-    closeSellWindow(); // Use context method
+    console.log("Cancel clicked, closing sell window");
+    closeSellWindow();
   };
 
   return (
