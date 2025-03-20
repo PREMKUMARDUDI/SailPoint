@@ -1,73 +1,66 @@
-import React, { createContext, useState, useEffect, useContext } from "react";
+import React, { createContext, useState, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
 
-const AuthContext = createContext();
+export const AuthContext = createContext();
 const BACKEND_URL =
   process.env.REACT_APP_BACKEND_URL || "http://localhost:3002";
-const FRONTEND_URL =
-  process.env.REACT_APP_FRONTEND_URL || "http://localhost:3000";
-const DASHBOARD_URL = "https://sailpoint-dashboard.onrender.com";
 
-export function AuthProvider({ children }) {
+export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [user, setUser] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [user, setUser] = useState(null);
+  const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
-    const verifyUser = async () => {
-      // Check URL for token first
-      const urlParams = new URLSearchParams(window.location.search);
-      const urlToken = urlParams.get("token");
-      let token = urlToken || localStorage.getItem("token");
-      console.log("Dashboard: Token from URL:", urlToken);
+    const verifyToken = async () => {
+      let token =
+        new URLSearchParams(location.search).get("token") ||
+        localStorage.getItem("token");
+      console.log("Dashboard: Token from URL:", token || "none");
       console.log(
         "Dashboard: Token from localStorage:",
         localStorage.getItem("token")
       );
 
-      if (urlToken) {
-        localStorage.setItem("token", urlToken); // Store it for future use
-      }
-
-      console.log("Dashboard: Final token used:", token);
       if (!token) {
-        console.log("Dashboard: No token found, redirecting...");
-        window.location.href = FRONTEND_URL;
+        console.log("No token found, redirecting to home");
+        setIsLoading(false);
+        navigate("/");
         return;
       }
 
+      console.log("Dashboard: Final token used:", token);
       try {
         console.log("Dashboard: Verifying token at:", `${BACKEND_URL}/verify`);
-        const { data } = await axios.post(
-          `${BACKEND_URL}/verify`,
-          { token },
-          { withCredentials: false, timeout: 60000 }
-        );
-        console.log("Dashboard: Verification response:", data);
-        if (data.status) {
-          console.log("Dashboard: User authenticated successfully");
+        const response = await axios.post(`${BACKEND_URL}/verify`, { token });
+        console.log("Dashboard: Verification response:", response.data);
+
+        if (response.data.status) {
+          localStorage.setItem("token", token); // Persist token
+          setUser(response.data.user);
           setIsAuthenticated(true);
-          setUser(data.user);
-          setIsLoading(false);
-          // Clear URL token after successful auth
-          window.history.replaceState({}, document.title, DASHBOARD_URL);
+          console.log("Dashboard: User authenticated successfully");
         } else {
-          console.log("Dashboard: Verification failed, clearing token...");
-          localStorage.removeItem("token");
-          window.location.href = FRONTEND_URL;
+          throw new Error("Token verification failed");
         }
       } catch (error) {
-        console.error(
-          "Dashboard: Verification error:",
-          error.message,
-          error.response?.data
-        );
+        console.error("Verification error:", error.message);
         localStorage.removeItem("token");
-        window.location.href = FRONTEND_URL;
+        setIsAuthenticated(false);
+        navigate("/");
+      } finally {
+        setIsLoading(false);
       }
     };
-    verifyUser();
-  }, []);
+
+    verifyToken();
+  }, [navigate, location.search]);
+
+  if (isLoading) {
+    return <div>Loading...</div>; // Show loading state
+  }
 
   console.log(
     "Dashboard: Rendering with isAuthenticated:",
@@ -76,16 +69,6 @@ export function AuthProvider({ children }) {
     isLoading
   );
 
-  if (isLoading) {
-    return <div>Loading Dashboard...</div>;
-  }
-
-  if (!isAuthenticated) {
-    console.log("Dashboard: Not authenticated, should have redirected earlier");
-    return null;
-  }
-
-  console.log("Dashboard: Rendering children");
   return (
     <AuthContext.Provider
       value={{
@@ -102,6 +85,6 @@ export function AuthProvider({ children }) {
       {children}
     </AuthContext.Provider>
   );
-}
+};
 
 export const useAuth = () => useContext(AuthContext);

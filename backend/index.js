@@ -152,18 +152,26 @@ app.post("/newSellOrder", async (req, res) => {
     let newOrder = new OrdersModel({
       name: req.body.name,
       qty: req.body.qty,
-      price: req.body.price,
+      price: Number(req.body.price).toFixed(2),
       mode: req.body.mode,
     });
     await newOrder.save();
 
-    const oldDoc = await HoldingsModel.findOneAndUpdate(
-      { name: req.body.name, price: req.body.price },
-      { $inc: { qty: -req.body.qty } }
-    );
-    await HoldingsModel.findOneAndDelete({ qty: 0 });
+    let holding = await HoldingsModel.findOne({
+      name: req.body.name,
+      price: req.body.price,
+    });
+    if (holding) {
+      holding.qty -= req.body.qty;
+      if (holding.qty <= 0) {
+        await HoldingsModel.deleteOne({ name: req.body.name });
+      } else {
+        await holding.save();
+      }
+    } else {
+      throw new Error("No holding found to sell");
+    }
 
-    console.log(oldDoc);
     res.send("Order saved!");
   } catch (error) {
     console.error("Error in /newSellOrder:", error.message);

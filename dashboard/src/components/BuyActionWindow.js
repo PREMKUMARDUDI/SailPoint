@@ -1,6 +1,7 @@
 import React, { useState, useContext } from "react";
 import axios from "axios";
 import GeneralContext from "./GeneralContext";
+import { useHoldings } from "./HoldingsContext"; // Use custom hook
 import "./BuyActionWindow.css";
 
 const BACKEND_URL =
@@ -10,12 +11,13 @@ const BuyActionWindow = ({ uid }) => {
   const [stockQuantity, setStockQuantity] = useState(1);
   const [stockPrice, setStockPrice] = useState(0.0);
   const { closeBuyWindow } = useContext(GeneralContext);
+  const { refreshHoldings } = useHoldings(); // Updated to useHoldings
 
   const handleBuyClick = async () => {
     const payload = {
       name: uid,
-      qty: Number(stockQuantity), // Ensure numeric
-      price: Number(stockPrice), // Ensure numeric
+      qty: Number(stockQuantity),
+      price: Number(stockPrice),
       mode: "BUY",
     };
     try {
@@ -25,6 +27,7 @@ const BuyActionWindow = ({ uid }) => {
       });
       const response = await axios.post(`${BACKEND_URL}/newBuyOrder`, payload);
       console.log("Buy response:", response.data);
+      refreshHoldings(); // Trigger refresh
       closeBuyWindow();
     } catch (error) {
       console.error("Buy error:", {
