@@ -19,6 +19,11 @@ const Menu = () => {
     setIsProfileDropdownOpen(!isProfileDropdownOpen); // Toggle dropdown visibility
   };
 
+  const handleLogout = () => {
+    console.log("Logout clicked");
+    logout(); // Calls AuthContext logout
+  };
+
   // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -134,7 +139,7 @@ const Menu = () => {
               <p>
                 <strong>Password:</strong> *******
               </p>
-              <button onClick={logout}>Logout</button>
+              <button onClick={handleLogout}>Logout</button>
             </div>
           )}
         </div>

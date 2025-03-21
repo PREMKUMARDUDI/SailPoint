@@ -60,6 +60,14 @@ export const AuthProvider = ({ children }) => {
     verifyToken();
   }, [navigate, location.search]);
 
+  const logout = () => {
+    console.log("Logging out...");
+    localStorage.removeItem("token");
+    setIsAuthenticated(false);
+    setUser(null);
+    window.location.href = FRONTEND_URL; // Force full reload
+  };
+
   if (isLoading) {
     return <div>Loading...</div>; // Show loading state
   }
@@ -76,12 +84,7 @@ export const AuthProvider = ({ children }) => {
       value={{
         isAuthenticated,
         user,
-        logout: () => {
-          localStorage.removeItem("token");
-          setIsAuthenticated(false);
-          setUser(null);
-          window.location.href = FRONTEND_URL;
-        },
+        logout,
       }}
     >
       {children}
