@@ -10,9 +10,9 @@ const Home = () => {
   const AuthenticatedContent = () => {
     const { isAuthenticated } = useAuth();
     if (!isAuthenticated) {
-      console.log("Unauthenticated, redirecting to:", FRONTEND_URL);
-      window.location.href = FRONTEND_URL; // Full page redirect
-      return null; // Prevent further rendering
+      console.log("Home: Unauthenticated, redirecting to:", FRONTEND_URL);
+      window.location.href = FRONTEND_URL;
+      return null;
     }
     return (
       <>

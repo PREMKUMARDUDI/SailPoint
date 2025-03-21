@@ -56,13 +56,11 @@ const WatchList = () => {
         />
         <span className="counts"> {watchlist.length} / 50</span>
       </div>
-
       <ul className="list">
         {watchlist.map((stock, index) => (
           <WatchListItem stock={stock} key={index} />
         ))}
       </ul>
-
       <DoughnutChart data={data} />
     </div>
   );
@@ -73,13 +71,8 @@ export default WatchList;
 const WatchListItem = ({ stock }) => {
   const [showWatchlistActions, setShowWatchlistActions] = useState(false);
 
-  const handleMouseEnter = () => {
-    setShowWatchlistActions(true);
-  };
-
-  const handleMouseLeave = () => {
-    setShowWatchlistActions(false);
-  };
+  const handleMouseEnter = () => setShowWatchlistActions(true);
+  const handleMouseLeave = () => setShowWatchlistActions(false);
 
   return (
     <li onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
@@ -104,12 +97,12 @@ const WatchListActions = ({ uid }) => {
   const { openBuyWindow, openSellWindow } = useContext(GeneralContext);
 
   const handleBuyClick = () => {
-    console.log("Buy clicked for:", uid);
+    console.log("WatchList: Buy clicked for:", uid);
     openBuyWindow(uid);
   };
 
   const handleSellClick = () => {
-    console.log("Sell clicked for:", uid);
+    console.log("WatchList: Sell clicked for:", uid);
     openSellWindow(uid);
   };
 

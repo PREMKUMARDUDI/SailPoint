@@ -20,7 +20,7 @@ const Menu = () => {
   };
 
   const handleLogout = () => {
-    console.log("Logout clicked");
+    console.log("Menu: Logout clicked");
     logout(); // Calls AuthContext logout
   };
 

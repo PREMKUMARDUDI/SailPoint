@@ -1,7 +1,7 @@
 import React, { useState, useContext } from "react";
 import axios from "axios";
 import GeneralContext from "./GeneralContext";
-import { useHoldings } from "./HoldingsContext"; // Use custom hook
+import { useHoldings } from "./HoldingsContext";
 import "./BuyActionWindow.css";
 
 const BACKEND_URL =
@@ -11,7 +11,7 @@ const BuyActionWindow = ({ uid }) => {
   const [stockQuantity, setStockQuantity] = useState(1);
   const [stockPrice, setStockPrice] = useState(0.0);
   const { closeBuyWindow } = useContext(GeneralContext);
-  const { refreshHoldings } = useHoldings(); // Updated to useHoldings
+  const { refreshHoldings } = useHoldings();
 
   const handleBuyClick = async () => {
     const payload = {
@@ -21,22 +21,22 @@ const BuyActionWindow = ({ uid }) => {
       mode: "BUY",
     };
     try {
-      console.log("Sending buy request:", {
+      console.log("Buy: Sending request:", {
         url: `${BACKEND_URL}/newBuyOrder`,
         payload,
       });
       const response = await axios.post(`${BACKEND_URL}/newBuyOrder`, payload);
-      console.log("Buy response:", response.data);
-      refreshHoldings(); // Trigger refresh
+      console.log("Buy: Response:", response.data);
+      refreshHoldings();
       closeBuyWindow();
     } catch (error) {
-      console.error("Buy error:", {
+      console.error("Buy: Error:", {
         message: error.message,
         status: error.response?.status,
         data: error.response?.data,
       });
       alert(
-        `Failed to buy stock: ${error.message}${
+        `Failed to buy: ${error.message}${
           error.response?.data?.message
             ? " - " + error.response.data.message
             : ""
@@ -46,7 +46,7 @@ const BuyActionWindow = ({ uid }) => {
   };
 
   const handleCancelClick = () => {
-    console.log("Cancel clicked, closing buy window");
+    console.log("Buy: Cancel clicked");
     closeBuyWindow();
   };
 

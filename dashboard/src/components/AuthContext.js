@@ -65,6 +65,7 @@ export const AuthProvider = ({ children }) => {
     localStorage.removeItem("token");
     setIsAuthenticated(false);
     setUser(null);
+    console.log("Auth: State updated - isAuthenticated:", false);
     window.location.href = FRONTEND_URL; // Force full reload
   };
 

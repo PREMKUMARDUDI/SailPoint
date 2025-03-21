@@ -15,25 +15,25 @@ export const GeneralContextProvider = (props) => {
   const [selectedStockUID, setSelectedStockUID] = useState("");
 
   const handleOpenBuyWindow = (uid) => {
-    console.log("Opening buy window for:", uid);
+    console.log("General: Opening buy window for:", uid);
     setIsBuyWindowOpen(true);
     setSelectedStockUID(uid);
   };
 
   const handleCloseBuyWindow = () => {
-    console.log("Closing buy window");
+    console.log("General: Closing buy window");
     setIsBuyWindowOpen(false);
     setSelectedStockUID("");
   };
 
   const handleOpenSellWindow = (uid) => {
-    console.log("Opening sell window for:", uid);
+    console.log("General: Opening sell window for:", uid);
     setIsSellWindowOpen(true);
     setSelectedStockUID(uid);
   };
 
   const handleCloseSellWindow = () => {
-    console.log("Closing sell window");
+    console.log("General: Closing sell window");
     setIsSellWindowOpen(false);
     setSelectedStockUID("");
   };
