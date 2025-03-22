@@ -28,9 +28,10 @@ export function HoldingsProvider({ children }) {
     fetchHoldings();
   }, [refreshTrigger]);
 
-  const refreshHoldings = () => {
+  const refreshHoldings = async () => {
     console.log("Holdings: Triggering refresh");
-    setRefreshTrigger((prev) => prev + 1);
+    await fetchHoldings(); // Call directly for immediate update
+    setRefreshTrigger((prev) => prev + 1); // Still trigger useEffect for consistency
   };
 
   return (
