@@ -7,33 +7,49 @@ const BACKEND_URL =
 
 export function HoldingsProvider({ children }) {
   const [allHoldings, setAllHoldings] = useState([]);
-  const [refreshTrigger, setRefreshTrigger] = useState(0); // Added for refresh
+  const [refreshTrigger, setRefreshTrigger] = useState(0);
 
   useEffect(() => {
-    console.log("Fetching holdings from:", `${BACKEND_URL}/allHoldings`);
+    console.log("Holdings: Fetching from:", `${BACKEND_URL}/allHoldings`);
     axios
       .get(`${BACKEND_URL}/allHoldings`)
       .then((res) => {
-        console.log("Holdings fetched:", res.data);
-        setAllHoldings(res.data);
+        console.log("Holdings: Fetched:", res.data);
+        setAllHoldings(res.data || []);
       })
       .catch((error) => {
-        console.error("Error fetching holdings:", error.message);
+        console.error("Holdings: Fetch error:", error.message);
+        setAllHoldings([]);
       });
-  }, [refreshTrigger]); // Trigger fetch on refresh
+  }, [refreshTrigger]);
 
   const refreshHoldings = () => {
-    console.log("Triggering holdings refresh");
+    console.log("Holdings: Triggering refresh");
     setRefreshTrigger((prev) => prev + 1);
   };
 
   return (
     <HoldingsContext.Provider
-      value={{ allHoldings, setAllHoldings, refreshHoldings }}
+      value={{
+        allHoldings,
+        setAllHoldings,
+        refreshHoldings,
+      }}
     >
       {children}
     </HoldingsContext.Provider>
   );
 }
 
-export const useHoldings = () => useContext(HoldingsContext);
+export const useHoldings = () => {
+  const context = useContext(HoldingsContext);
+  if (context === undefined) {
+    console.error("useHoldings must be used within a HoldingsProvider");
+    return {
+      allHoldings: [],
+      setAllHoldings: () => {},
+      refreshHoldings: () => {},
+    }; // Fallback
+  }
+  return context;
+};
