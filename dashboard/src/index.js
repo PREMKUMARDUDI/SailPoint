@@ -15,12 +15,7 @@ root.render(
         <GeneralContextProvider>
           <HoldingsProvider>
             <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/holdings" element={<Home />} />
-              <Route path="/orders" element={<Home />} />
-              <Route path="/positions" element={<Home />} />
-              <Route path="/funds" element={<Home />} />
-              <Route path="*" element={<Home />} />
+              <Route path="/*" element={<Home />} />
             </Routes>
           </HoldingsProvider>
         </GeneralContextProvider>
