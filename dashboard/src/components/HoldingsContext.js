@@ -9,18 +9,20 @@ export function HoldingsProvider({ children }) {
   const [allHoldings, setAllHoldings] = useState([]);
   const [refreshTrigger, setRefreshTrigger] = useState(0);
 
-  useEffect(() => {
+  const fetchHoldings = async () => {
     console.log("Holdings: Fetching from:", `${BACKEND_URL}/allHoldings`);
-    axios
-      .get(`${BACKEND_URL}/allHoldings`)
-      .then((res) => {
-        console.log("Holdings: Fetched:", res.data);
-        setAllHoldings(res.data || []);
-      })
-      .catch((error) => {
-        console.error("Holdings: Fetch error:", error.message);
-        setAllHoldings([]);
-      });
+    try {
+      const response = await axios.get(`${BACKEND_URL}/allHoldings`);
+      console.log("Holdings: Fetched:", response.data);
+      setAllHoldings(response.data || []);
+    } catch (error) {
+      console.error("Holdings: Fetch error:", error.message);
+      setAllHoldings([]);
+    }
+  };
+
+  useEffect(() => {
+    fetchHoldings();
   }, [refreshTrigger]);
 
   const refreshHoldings = () => {

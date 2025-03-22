@@ -16,7 +16,7 @@ const Menu = () => {
   };
 
   const handleProfileClick = () => {
-    console.log("Menu: Profile clicked, toggling dropdown");
+    console.log("Menu: Profile clicked, toggling dropdown, user:", user);
     setIsProfileDropdownOpen(!isProfileDropdownOpen); // Toggle dropdown visibility
   };
 

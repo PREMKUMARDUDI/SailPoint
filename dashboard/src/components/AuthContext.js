@@ -20,37 +20,39 @@ export const AuthProvider = ({ children }) => {
       let token =
         new URLSearchParams(location.search).get("token") ||
         localStorage.getItem("token");
-      console.log("Dashboard: Token from URL:", token || "none");
+      console.log("Auth: Token from URL:", token || "none");
       console.log(
-        "Dashboard: Token from localStorage:",
+        "Auth: Token from localStorage:",
         localStorage.getItem("token")
       );
 
       if (!token) {
-        console.log("No token found, redirecting to home");
+        console.log("Auth: No token found, redirecting to home");
         setIsLoading(false);
         navigate("/");
         return;
       }
 
-      console.log("Dashboard: Final token used:", token);
+      console.log("Auth: Final token used:", token);
       try {
         console.log("Dashboard: Verifying token at:", `${BACKEND_URL}/verify`);
         const response = await axios.post(`${BACKEND_URL}/verify`, { token });
-        console.log("Dashboard: Verification response:", response.data);
+        console.log("Auth: Verification response:", response.data);
+        console.log("Auth: User data:", response.data.user);
 
         if (response.data.status) {
           localStorage.setItem("token", token); // Persist token
-          setUser(response.data.user);
+          setUser(response.data.user || {}); // Ensure user is an object
           setIsAuthenticated(true);
-          console.log("Dashboard: User authenticated successfully");
+          console.log("Auth: User authenticated successfully");
         } else {
           throw new Error("Token verification failed");
         }
       } catch (error) {
-        console.error("Verification error:", error.message);
+        console.error("Auth: Verification error:", error.message);
         localStorage.removeItem("token");
         setIsAuthenticated(false);
+        setUser(null);
         navigate("/");
       } finally {
         setIsLoading(false);
@@ -73,12 +75,7 @@ export const AuthProvider = ({ children }) => {
     return <div>Loading...</div>; // Show loading state
   }
 
-  console.log(
-    "Dashboard: Rendering with isAuthenticated:",
-    isAuthenticated,
-    "isLoading:",
-    isLoading
-  );
+  console.log("Auth: Rendering with isAuthenticated:", isAuthenticated);
 
   return (
     <AuthContext.Provider
