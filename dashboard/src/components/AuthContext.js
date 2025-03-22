@@ -29,6 +29,8 @@ export const AuthProvider = ({ children }) => {
       if (!token) {
         console.log("Auth: No token found, redirecting to home");
         setIsLoading(false);
+        setIsAuthenticated(false);
+        setUser(null);
         navigate("/");
         return;
       }
@@ -68,7 +70,7 @@ export const AuthProvider = ({ children }) => {
     setIsAuthenticated(false);
     setUser(null);
     console.log("Auth: State updated - isAuthenticated:", false);
-    window.location.href = FRONTEND_URL; // Force full reload
+    window.location.href = `${FRONTEND_URL}?logout=true`; // Add param to prevent re-auth
   };
 
   if (isLoading) {

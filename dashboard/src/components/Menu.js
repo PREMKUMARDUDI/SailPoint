@@ -132,13 +132,13 @@ const Menu = () => {
           {isProfileDropdownOpen && isAuthenticated && (
             <div className="profile-dropdown" ref={dropdownRef}>
               <p>
+                <strong>User ID:</strong> {user?._id || "N/A"}
+              </p>
+              <p>
                 <strong>Username:</strong> {user?.username || "N/A"}
               </p>
               <p>
                 <strong>Email:</strong> {user?.email || "N/A"}
-              </p>
-              <p>
-                <strong>Password:</strong> *******
               </p>
               <button onClick={handleLogout}>Logout</button>
             </div>

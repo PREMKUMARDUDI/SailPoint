@@ -14,6 +14,7 @@ const SellActionWindow = ({ uid }) => {
   const { refreshHoldings } = useHoldings();
 
   const handleSellClick = async () => {
+    const token = localStorage.getItem("token");
     const payload = {
       name: uid,
       qty: Number(stockQuantity),
@@ -25,7 +26,13 @@ const SellActionWindow = ({ uid }) => {
         url: `${BACKEND_URL}/newSellOrder`,
         payload,
       });
-      const response = await axios.post(`${BACKEND_URL}/newSellOrder`, payload);
+      const response = await axios.post(
+        `${BACKEND_URL}/newSellOrder`,
+        payload,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
       console.log("Sell: Response:", response.data);
       refreshHoldings();
       closeSellWindow();

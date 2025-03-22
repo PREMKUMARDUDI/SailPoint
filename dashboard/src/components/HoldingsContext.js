@@ -12,7 +12,10 @@ export function HoldingsProvider({ children }) {
   const fetchHoldings = async () => {
     console.log("Holdings: Fetching from:", `${BACKEND_URL}/allHoldings`);
     try {
-      const response = await axios.get(`${BACKEND_URL}/allHoldings`);
+      const token = localStorage.getItem("token");
+      const response = await axios.get(`${BACKEND_URL}/allHoldings`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
       console.log("Holdings: Fetched:", response.data);
       setAllHoldings(response.data || []);
     } catch (error) {
