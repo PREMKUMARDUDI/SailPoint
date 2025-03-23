@@ -15,6 +15,7 @@ export function HoldingsProvider({ children }) {
       const token = localStorage.getItem("token");
       const response = await axios.get(`${BACKEND_URL}/allHoldings`, {
         headers: { Authorization: `Bearer ${token}` },
+        cache: "no-store",
       });
       console.log("Holdings: Fetched:", response.data);
       setAllHoldings(response.data || []);
@@ -30,8 +31,7 @@ export function HoldingsProvider({ children }) {
 
   const refreshHoldings = async () => {
     console.log("Holdings: Triggering refresh");
-    await fetchHoldings(); // Call directly for immediate update
-    setRefreshTrigger((prev) => prev + 1); // Still trigger useEffect for consistency
+    await fetchHoldings(); // Immediate fetch
   };
 
   return (
