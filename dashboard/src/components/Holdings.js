@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { VerticalGraph } from "./VerticalGraph";
 import { useHoldings } from "./HoldingsContext";
 
