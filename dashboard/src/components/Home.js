@@ -11,23 +11,13 @@ const Home = () => {
   const { isAuthenticated } = useAuth();
   const location = useLocation();
 
-  if (!isAuthenticated) {
+  if (!isAuthenticated && !location.search.includes("token")) {
     console.log("Home: Unauthenticated, redirecting to:", FRONTEND_URL);
     window.location.href = FRONTEND_URL;
     return null;
   }
 
-  // On reload with token, strip query and render Dashboard
-  if (location.search.includes("token")) {
-    console.log("Home: Token in URL, rendering Dashboard");
-    return (
-      <>
-        <TopBar />
-        <Dashboard />
-      </>
-    );
-  }
-
+  console.log("Home: Rendering Dashboard, isAuthenticated:", isAuthenticated);
   return (
     <>
       <TopBar />

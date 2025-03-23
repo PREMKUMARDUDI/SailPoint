@@ -7,7 +7,7 @@ const BACKEND_URL =
 
 export function HoldingsProvider({ children }) {
   const [allHoldings, setAllHoldings] = useState([]);
-  const [refreshTrigger, setRefreshTrigger] = useState(0);
+  const [refreshKey, setRefreshKey] = useState(0); // New key to force re-render
 
   const fetchHoldings = async () => {
     console.log("Holdings: Fetching from:", `${BACKEND_URL}/allHoldings`);
@@ -19,6 +19,7 @@ export function HoldingsProvider({ children }) {
       });
       console.log("Holdings: Fetched:", response.data);
       setAllHoldings(response.data || []);
+      setRefreshKey((prev) => prev + 1); // Force re-render
     } catch (error) {
       console.error("Holdings: Fetch error:", error.message);
       setAllHoldings([]);
@@ -27,7 +28,7 @@ export function HoldingsProvider({ children }) {
 
   useEffect(() => {
     fetchHoldings();
-  }, [refreshTrigger]);
+  }, []);
 
   const refreshHoldings = async () => {
     console.log("Holdings: Triggering refresh");

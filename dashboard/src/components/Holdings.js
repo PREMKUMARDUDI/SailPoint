@@ -3,7 +3,7 @@ import { VerticalGraph } from "./VerticalGraph";
 import { useHoldings } from "./HoldingsContext";
 
 const Holdings = () => {
-  const { allHoldings } = useHoldings();
+  const { allHoldings, refreshKey } = useHoldings();
 
   const data = {
     labels: allHoldings.map((subArray) => subArray["name"]),
@@ -15,6 +15,10 @@ const Holdings = () => {
       },
     ],
   };
+
+  useEffect(() => {
+    console.log("Holdings: Rendered with refreshKey:", refreshKey);
+  }, [refreshKey]); // Re-render on key change
 
   return (
     <>

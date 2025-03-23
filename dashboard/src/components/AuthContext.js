@@ -29,18 +29,15 @@ export const AuthProvider = ({ children }) => {
       if (!token) {
         console.log("Auth: No token found, redirecting to home");
         setIsLoading(false);
-        setIsAuthenticated(false);
         setUser(null);
-        navigate("/");
+        setIsAuthenticated(false);
         return;
       }
 
-      console.log("Auth: Final token used:", token);
       try {
         console.log("Dashboard: Verifying token at:", `${BACKEND_URL}/verify`);
         const response = await axios.post(`${BACKEND_URL}/verify`, { token });
         console.log("Auth: Verification response:", response.data);
-        console.log("Auth: User data:", response.data.user);
 
         if (response.data.status) {
           localStorage.setItem("token", token); // Persist token
