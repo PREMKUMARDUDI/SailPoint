@@ -17,31 +17,35 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     const verifyToken = async () => {
-      let token =
-        new URLSearchParams(location.search).get("token") ||
-        localStorage.getItem("token");
+      const searchParams = new URLSearchParams(location.search);
+      let token = searchParams.get("token") || localStorage.getItem("token");
+      const isLogout = searchParams.get("logout") === "true";
+
       console.log("Auth: Token from URL:", token || "none");
       console.log(
         "Auth: Token from localStorage:",
         localStorage.getItem("token")
       );
+      console.log("Auth: Is logout?", isLogout);
 
-      if (!token) {
-        console.log("Auth: No token found, redirecting to home");
-        setIsLoading(false);
-        setUser(null);
+      if (isLogout || (!token && !localStorage.getItem("token"))) {
+        console.log("Auth: No token or logout requested");
         setIsAuthenticated(false);
+        setUser(null);
+        setIsLoading(false);
+        localStorage.removeItem("token");
+        navigate("/");
         return;
       }
 
       try {
-        console.log("Dashboard: Verifying token at:", `${BACKEND_URL}/verify`);
+        console.log("Auth: Verifying token at:", `${BACKEND_URL}/verify`);
         const response = await axios.post(`${BACKEND_URL}/verify`, { token });
         console.log("Auth: Verification response:", response.data);
 
         if (response.data.status) {
-          localStorage.setItem("token", token); // Persist token
-          setUser(response.data.user || {}); // Ensure user is an object
+          localStorage.setItem("token", token);
+          setUser(response.data.user || {});
           setIsAuthenticated(true);
           console.log("Auth: User authenticated successfully");
         } else {
@@ -66,24 +70,17 @@ export const AuthProvider = ({ children }) => {
     localStorage.removeItem("token");
     setIsAuthenticated(false);
     setUser(null);
-    console.log("Auth: State updated - isAuthenticated:", false);
-    window.location.href = `${FRONTEND_URL}?logout=true`; // Add param to prevent re-auth
+    navigate("/"); // Stay in app
+    window.location.href = `${FRONTEND_URL}?logout=true`; // Then redirect
   };
 
   if (isLoading) {
-    return <div>Loading...</div>; // Show loading state
+    return <div>Loading...</div>;
   }
 
   console.log("Auth: Rendering with isAuthenticated:", isAuthenticated);
-
   return (
-    <AuthContext.Provider
-      value={{
-        isAuthenticated,
-        user,
-        logout,
-      }}
-    >
+    <AuthContext.Provider value={{ isAuthenticated, user, logout }}>
       {children}
     </AuthContext.Provider>
   );

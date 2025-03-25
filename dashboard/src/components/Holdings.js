@@ -18,7 +18,7 @@ const Holdings = () => {
 
   useEffect(() => {
     console.log("Holdings: Rendered with refreshKey:", refreshKey);
-  }, [refreshKey]); // Re-render on key change
+  }, [refreshKey, allHoldings]); // Depend on both to ensure re-render
 
   return (
     <>

@@ -7,7 +7,7 @@ const BACKEND_URL =
 
 export function HoldingsProvider({ children }) {
   const [allHoldings, setAllHoldings] = useState([]);
-  const [refreshKey, setRefreshKey] = useState(0); // New key to force re-render
+  const [refreshKey, setRefreshKey] = useState(0);
 
   const fetchHoldings = async () => {
     console.log("Holdings: Fetching from:", `${BACKEND_URL}/allHoldings`);
@@ -19,7 +19,7 @@ export function HoldingsProvider({ children }) {
       });
       console.log("Holdings: Fetched:", response.data);
       setAllHoldings(response.data || []);
-      setRefreshKey((prev) => prev + 1); // Force re-render
+      setRefreshKey((prev) => prev + 1); // Increment to force re-render
     } catch (error) {
       console.error("Holdings: Fetch error:", error.message);
       setAllHoldings([]);
@@ -32,17 +32,17 @@ export function HoldingsProvider({ children }) {
 
   const refreshHoldings = async () => {
     console.log("Holdings: Triggering refresh");
-    await fetchHoldings(); // Immediate fetch
+    await fetchHoldings();
+  };
+
+  const value = {
+    allHoldings,
+    refreshHoldings,
+    refreshKey,
   };
 
   return (
-    <HoldingsContext.Provider
-      value={{
-        allHoldings,
-        setAllHoldings,
-        refreshHoldings,
-      }}
-    >
+    <HoldingsContext.Provider value={value}>
       {children}
     </HoldingsContext.Provider>
   );
@@ -52,11 +52,7 @@ export const useHoldings = () => {
   const context = useContext(HoldingsContext);
   if (context === undefined) {
     console.error("useHoldings must be used within a HoldingsProvider");
-    return {
-      allHoldings: [],
-      setAllHoldings: () => {},
-      refreshHoldings: () => {},
-    }; // Fallback
+    return { allHoldings: [], refreshHoldings: () => {}, refreshKey: 0 };
   }
   return context;
 };
