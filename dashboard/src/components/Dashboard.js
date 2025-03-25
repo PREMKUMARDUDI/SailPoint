@@ -10,6 +10,7 @@ import { GeneralContextProvider } from "./GeneralContext";
 import { HoldingsProvider } from "./HoldingsContext";
 
 const Dashboard = () => {
+  console.log("Dashboard: Rendering at path:", window.location.pathname);
   return (
     <GeneralContextProvider>
       <HoldingsProvider>
@@ -22,7 +23,7 @@ const Dashboard = () => {
               <Route path="/orders" element={<Orders />} />
               <Route path="/positions" element={<Positions />} />
               <Route path="/funds" element={<Funds />} />
-              <Route path="*" element={<Summary />} />
+              <Route path="*" element={<div>Not Found</div>} />
             </Routes>
           </div>
         </div>

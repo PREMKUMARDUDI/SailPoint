@@ -18,22 +18,30 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     const verifyToken = async () => {
       const searchParams = new URLSearchParams(location.search);
-      let token = searchParams.get("token") || localStorage.getItem("token");
+      const tokenFromUrl = searchParams.get("token");
+      const tokenFromStorage = localStorage.getItem("token");
       const isLogout = searchParams.get("logout") === "true";
+      const token = tokenFromUrl || tokenFromStorage;
 
-      console.log("Auth: Token from URL:", token || "none");
-      console.log(
-        "Auth: Token from localStorage:",
-        localStorage.getItem("token")
-      );
+      console.log("Auth: Token from URL:", tokenFromUrl || "none");
+      console.log("Auth: Token from localStorage:", tokenFromStorage || "none");
       console.log("Auth: Is logout?", isLogout);
 
-      if (isLogout || (!token && !localStorage.getItem("token"))) {
-        console.log("Auth: No token or logout requested");
+      if (isLogout) {
+        console.log("Auth: Logout detected, clearing state");
+        localStorage.removeItem("token");
         setIsAuthenticated(false);
         setUser(null);
         setIsLoading(false);
-        localStorage.removeItem("token");
+        navigate("/");
+        return;
+      }
+
+      if (!token) {
+        console.log("Auth: No token found");
+        setIsAuthenticated(false);
+        setUser(null);
+        setIsLoading(false);
         navigate("/");
         return;
       }
@@ -70,8 +78,10 @@ export const AuthProvider = ({ children }) => {
     localStorage.removeItem("token");
     setIsAuthenticated(false);
     setUser(null);
-    navigate("/"); // Stay in app
-    window.location.href = `${FRONTEND_URL}?logout=true`; // Then redirect
+    navigate("/"); // Reset route
+    setTimeout(() => {
+      window.location.href = `${FRONTEND_URL}?logout=true`; // Redirect after state update
+    }, 100); // Delay to ensure state persists
   };
 
   if (isLoading) {

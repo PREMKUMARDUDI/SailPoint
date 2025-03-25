@@ -17,7 +17,12 @@ const Home = () => {
     return null;
   }
 
-  console.log("Home: Rendering Dashboard, isAuthenticated:", isAuthenticated);
+  console.log(
+    "Home: Rendering Dashboard at path:",
+    location.pathname,
+    "isAuthenticated:",
+    isAuthenticated
+  );
   return (
     <>
       <TopBar />
