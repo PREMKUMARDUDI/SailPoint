@@ -59,6 +59,10 @@ export const AuthProvider = ({ children }) => {
           setUser(response.data.user || {});
           setIsAuthenticated(true);
           console.log("Auth: User authenticated successfully");
+          // Append token to URL if authenticated and not present
+          if (!tokenFromUrl && location.pathname !== "/") {
+            navigate(`${location.pathname}?token=${token}`, { replace: true });
+          }
         } else {
           throw new Error("Token verification failed");
         }
@@ -83,7 +87,7 @@ export const AuthProvider = ({ children }) => {
     setUser(null);
     navigate("/"); // Reset route
     setTimeout(() => {
-      window.location.href = `${FRONTEND_URL}?logout=true`; // Redirect after state update
+      window.location.href = FRONTEND_URL;
     }, 100); // Delay to ensure state persists
   };
 

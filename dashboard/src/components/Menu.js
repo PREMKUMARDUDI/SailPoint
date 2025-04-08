@@ -51,6 +51,8 @@ const Menu = () => {
 
   const menuclass = "menu";
   const activeMenuclass = "menu selected";
+  const getLinkPath = (path) =>
+    isAuthenticated && token ? `${path}?token=${token}` : path;
 
   return (
     <div className="menu-container">
@@ -62,7 +64,7 @@ const Menu = () => {
           <li>
             <Link
               style={{ textDecoration: "none" }}
-              to="/"
+              to={getLinkPath("/")}
               onClick={() => handleMenuClick(0)}
             >
               <p className={selectedMenu === 0 ? activeMenuclass : menuclass}>
@@ -73,7 +75,7 @@ const Menu = () => {
           <li>
             <Link
               style={{ textDecoration: "none" }}
-              to="/orders"
+              to={getLinkPath("/orders")}
               onClick={() => handleMenuClick(1)}
             >
               <p className={selectedMenu === 1 ? activeMenuclass : menuclass}>
@@ -84,7 +86,7 @@ const Menu = () => {
           <li>
             <Link
               style={{ textDecoration: "none" }}
-              to="/holdings"
+              to={getLinkPath("/holdings")}
               onClick={() => handleMenuClick(2)}
             >
               <p className={selectedMenu === 2 ? activeMenuclass : menuclass}>
@@ -95,7 +97,7 @@ const Menu = () => {
           <li>
             <Link
               style={{ textDecoration: "none" }}
-              to="/positions"
+              to={getLinkPath("/positions")}
               onClick={() => handleMenuClick(3)}
             >
               <p className={selectedMenu === 3 ? activeMenuclass : menuclass}>
@@ -106,7 +108,7 @@ const Menu = () => {
           <li>
             <Link
               style={{ textDecoration: "none" }}
-              to="/funds"
+              to={getLinkPath("/funds")}
               onClick={() => handleMenuClick(4)}
             >
               <p className={selectedMenu === 4 ? activeMenuclass : menuclass}>
@@ -115,7 +117,7 @@ const Menu = () => {
             </Link>
           </li>
           <li>
-            <Link style={{ textDecoration: "none" }} to={`${FRONTEND_URL}`}>
+            <Link style={{ textDecoration: "none" }} to={FRONTEND_URL}>
               <p
                 className={selectedMenu === 0 ? activeMenuclass : menuclass}
                 style={{ color: "#000" }}
