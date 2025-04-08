@@ -10,6 +10,7 @@ const Menu = () => {
   const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
   const { isAuthenticated, user, logout } = useAuth();
   const dropdownRef = useRef(null); // Ref to track the dropdown element
+  const token = localStorage.getItem("token");
 
   const handleMenuClick = (index) => {
     setSelectedMenu(index);
