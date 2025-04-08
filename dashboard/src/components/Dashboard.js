@@ -1,5 +1,5 @@
 import React from "react";
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, useLocation } from "react-router-dom";
 import Funds from "./Funds";
 import Holdings from "./Holdings";
 import Orders from "./Orders";
@@ -10,7 +10,8 @@ import { GeneralContextProvider } from "./GeneralContext";
 import { HoldingsProvider } from "./HoldingsContext";
 
 const Dashboard = () => {
-  console.log("Dashboard: Rendering at path:", window.location.pathname);
+  const location = useLocation();
+  console.log("Dashboard: Rendering at path:", location.pathname);
   return (
     <GeneralContextProvider>
       <HoldingsProvider>

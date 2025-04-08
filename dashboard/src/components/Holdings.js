@@ -25,6 +25,7 @@ const Holdings = () => {
     );
   }, [refreshKey, allHoldings]); // Depend on both to ensure re-render
 
+  console.log("Holdings: Rendering UI with allHoldings:", allHoldings);
   return (
     <>
       <h3 className="title">Holdings ({allHoldings.length})</h3>

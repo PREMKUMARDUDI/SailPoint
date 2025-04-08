@@ -9,7 +9,9 @@ const FRONTEND_URL =
   process.env.REACT_APP_FRONTEND_URL || "http://localhost:3000";
 
 export const AuthProvider = ({ children }) => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(() => {
+    return !!localStorage.getItem("token"); // Initial state from storage
+  });
   const [isLoading, setIsLoading] = useState(true);
   const [user, setUser] = useState(null);
   const navigate = useNavigate();
@@ -26,6 +28,7 @@ export const AuthProvider = ({ children }) => {
       console.log("Auth: Token from URL:", tokenFromUrl || "none");
       console.log("Auth: Token from localStorage:", tokenFromStorage || "none");
       console.log("Auth: Is logout?", isLogout);
+      console.log("Auth: Current path:", location.pathname);
 
       if (isLogout) {
         console.log("Auth: Logout detected, clearing state");
@@ -42,7 +45,7 @@ export const AuthProvider = ({ children }) => {
         setIsAuthenticated(false);
         setUser(null);
         setIsLoading(false);
-        navigate("/");
+        if (location.pathname !== "/") navigate("/");
         return;
       }
 

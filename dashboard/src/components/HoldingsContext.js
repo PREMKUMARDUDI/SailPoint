@@ -35,11 +35,10 @@ export function HoldingsProvider({ children }) {
     await fetchHoldings();
   };
 
-  const value = {
-    allHoldings,
-    refreshHoldings,
-    refreshKey,
-  };
+  const value = React.useMemo(
+    () => ({ allHoldings, refreshHoldings, refreshKey }),
+    [allHoldings, refreshKey]
+  );
 
   return (
     <HoldingsContext.Provider value={value}>

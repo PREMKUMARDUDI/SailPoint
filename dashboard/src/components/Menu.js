@@ -22,6 +22,7 @@ const Menu = () => {
 
   const handleLogout = () => {
     console.log("Menu: Logout clicked");
+    setIsProfileDropdownOpen(false);
     logout(); // Calls AuthContext logout
   };
 
@@ -131,9 +132,6 @@ const Menu = () => {
           </div>
           {isProfileDropdownOpen && isAuthenticated && (
             <div className="profile-dropdown" ref={dropdownRef}>
-              <p>
-                <strong>User ID:</strong> {user?._id || "N/A"}
-              </p>
               <p>
                 <strong>Username:</strong> {user?.username || "N/A"}
               </p>
