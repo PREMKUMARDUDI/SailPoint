@@ -57,7 +57,7 @@ const Menu = () => {
 
   return (
     <div className="menu-container">
-      <Link to="http://localhost:3001">
+      <Link to={process.env.REACT_APP_DASHBOARD_URL}>
         <img src="logo.png" style={{ width: "30px" }} alt="Logo" />
       </Link>
       <div className="menus">
