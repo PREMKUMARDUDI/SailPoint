@@ -34,7 +34,7 @@ const SellActionWindow = ({ uid }) => {
         }
       );
       console.log("Sell: Response:", response.data);
-      await refreshHoldings(); // Await to ensure update
+      setTimeout(() => refreshHoldings(), 500); // Delay to ensure backend sync
       closeSellWindow();
     } catch (error) {
       console.error("Sell: Error:", {

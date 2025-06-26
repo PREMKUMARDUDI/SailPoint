@@ -10,10 +10,25 @@ const DASHBOARD_URL =
 function Navbar() {
   const navigate = useNavigate();
   const location = useLocation();
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(
+    () => !!localStorage.getItem("token")
+  );
 
   useEffect(() => {
     const verifyUser = async () => {
+      const searchParams = new URLSearchParams(location.search);
+      const isLogout = searchParams.get("logout") === "true";
+
+      console.log("Navbar: Is logout?", isLogout);
+      if (isLogout) {
+        console.log("Navbar: Logout detected, clearing token");
+        localStorage.removeItem("token");
+        localStorage.setItem("isAuthenticated", "false");
+        setIsAuthenticated(false);
+        navigate("/"); // Reset to frontend root
+        return;
+      }
+
       const token = localStorage.getItem("token");
       console.log("Navbar token from localStorage:", token);
 
@@ -31,20 +46,26 @@ function Navbar() {
           { token },
           { withCredentials: false, timeout: 60000 }
         );
-        console.log("Verification response:", data);
-        setIsAuthenticated(data.status);
-        localStorage.setItem("isAuthenticated", data.status.toString());
+        console.log("Navbar:Verification response:", data);
+        if (data.status) {
+          setIsAuthenticated(true);
+          localStorage.setItem("isAuthenticated", "true");
+        } else {
+          throw new Error("Token verification failed");
+        }
       } catch (error) {
-        console.error("Verification error:", error.message);
+        console.error("Navbar: Verification error:", error.message);
         setIsAuthenticated(false);
+        localStorage.removeItem("token");
         localStorage.setItem("isAuthenticated", "false");
       }
     };
     verifyUser();
-  }, [location]);
+  }, [location.search, navigate]); // Only re-run on search change
 
   const handleDashboardClick = (e) => {
     e.preventDefault();
+    console.log("Navbar: Dashboard clicked, isAuthenticated:", isAuthenticated);
     if (isAuthenticated) {
       const token = localStorage.getItem("token");
       window.location.href = `${DASHBOARD_URL}?token=${token}`;

@@ -30,7 +30,7 @@ const BuyActionWindow = ({ uid }) => {
         headers: { Authorization: `Bearer ${token}` },
       });
       console.log("Buy: Response:", response.data);
-      await refreshHoldings(); // Await to ensure update
+      setTimeout(() => refreshHoldings(), 500); // Delay to ensure backend sync
       closeBuyWindow();
     } catch (error) {
       console.error("Buy: Error:", {

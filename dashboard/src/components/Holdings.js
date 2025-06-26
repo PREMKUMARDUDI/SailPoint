@@ -4,7 +4,7 @@ import { useHoldings } from "./HoldingsContext";
 import { useLocation } from "react-router-dom";
 
 const Holdings = () => {
-  const { allHoldings, refreshKey } = useHoldings();
+  const { allHoldings, refreshKey, refreshHoldings } = useHoldings();
   const location = useLocation();
 
   const data = {
@@ -18,6 +18,14 @@ const Holdings = () => {
     ],
   };
 
+  // Re-fetch holdings when navigating to /holdings
+  useEffect(() => {
+    if (location.pathname === "/holdings") {
+      console.log("Holdings: Navigating to /holdings, triggering refresh");
+      refreshHoldings();
+    }
+  }, [location.pathname, refreshHoldings]);
+
   useEffect(() => {
     console.log(
       "Holdings: Rendered with refreshKey:",
@@ -25,7 +33,7 @@ const Holdings = () => {
       "allHoldings:",
       allHoldings
     );
-  }, [refreshKey, allHoldings, location.pathname]); // Depend on both to ensure re-render
+  }, [refreshKey, allHoldings]); // Depend on both to ensure re-render
 
   console.log("Holdings: Rendering UI with allHoldings:", allHoldings);
   return (

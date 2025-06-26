@@ -87,7 +87,7 @@ export const AuthProvider = ({ children }) => {
     setUser(null);
     navigate("/"); // Reset route
     setTimeout(() => {
-      window.location.href = FRONTEND_URL;
+      window.location.href = `${FRONTEND_URL}?logout=true`; // Signal logout to frontend
     }, 100); // Delay to ensure state persists
   };
 
