@@ -1,8 +1,6 @@
 # SailPoint - Full Stack Stock Trading Platform
 
 [![Live Demo](https://img.shields.io/badge/Live-Demo-success)](https://sailpoint-frontend.onrender.com)
-[![Dashboard](https://img.shields.io/badge/Trading-Dashboard-blue)](https://sailpoint-dashboard.onrender.com)
-[![GitHub](https://img.shields.io/badge/GitHub-Repository-black)](https://github.com/PREMKUMARDUDI/SailPoint)
 
 A comprehensive full-stack stock trading platform that enables users to manage their investment portfolio, execute trades, and track real-time market positions with an intuitive dashboard interface.
 
