@@ -182,7 +182,7 @@ The application is deployed on **Render** with three separate services:
 **Prem Kumar Dudi**
 
 - GitHub: [@PREMKUMARDUDI](https://github.com/PREMKUMARDUDI)
-- Email: [premkumarchoudhary096@gmail.com]
+- LinkedIn: [Connect with me](https://linkedin.com/in/dudipremkumar)
 
 ## 🙏 Acknowledgments
 
