@@ -32,11 +32,13 @@ A comprehensive full-stack stock trading platform that enables users to manage t
 │   (React 19)    │◄──►│   (React 18)    │◄──►│   (Node.js)     │
 │   Landing Page  │    │   Trading UI    │    │   REST API      │
 └─────────────────┘    └─────────────────┘    └─────────────────┘
-                                                        │
-                                               ┌─────────────────┐
-                                               │   MongoDB       │
-                                               │   Database      │
-                                               └─────────────────┘
+    │                          │                      │
+    │                          │                      │
+   ┌────▼────┐            ┌────▼────┐            ┌────▼────┐
+   │ Render  │            │ Render  │            │ MongoDB │
+   │ Hosting │            │ Hosting │            │Database │
+   └─────────┘            └─────────┘            └─────────┘
+
 ```
 
 ### Technology Stack
