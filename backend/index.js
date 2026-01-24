@@ -131,7 +131,7 @@ app.post("/newBuyOrder", async (req, res) => {
 
     let holding = await HoldingsModel.findOne({
       name: req.body.name,
-      price: req.body.price,
+      avg: req.body.avg,
     });
 
     if (holding) {
