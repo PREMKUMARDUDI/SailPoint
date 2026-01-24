@@ -34,7 +34,7 @@ app.use(
     credentials: true,
     methods: ["GET", "POST", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"],
-  })
+  }),
 );
 app.use((req, res, next) => {
   console.log(`${req.method} request to ${req.path}`);
@@ -81,7 +81,7 @@ const connectDB = async () => {
 // Mongoose event listeners
 mongoose.connection.on("connected", () => console.log("DB connected"));
 mongoose.connection.on("error", (err) =>
-  console.error("DB issue:", err.message)
+  console.error("DB issue:", err.message),
 );
 mongoose.connection.on("disconnected", () => {
   console.log("DB disconnected");
@@ -149,21 +149,22 @@ app.post("/newBuyOrder", async (req, res) => {
 
 app.post("/newSellOrder", async (req, res) => {
   try {
+    let holding = await HoldingsModel.findOne({
+      name: req.body.name,
+      price: req.body.price,
+    });
+
     let newOrder = new OrdersModel({
       name: req.body.name,
-      qty: req.body.qty,
+      qty: Math.min(holding.qty, req.body.qty),
       price: Number(req.body.price).toFixed(2),
       mode: req.body.mode,
     });
     await newOrder.save();
 
-    let holding = await HoldingsModel.findOne({
-      name: req.body.name,
-      price: req.body.price,
-    });
     if (holding) {
-      holding.qty -= req.body.qty;
-      if (holding.qty <= 0) {
+      holding.qty -= Math.min(holding.qty, req.body.qty);
+      if (holding.qty == 0) {
         await HoldingsModel.deleteOne({ name: req.body.name });
       } else {
         await holding.save();
