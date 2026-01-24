@@ -129,16 +129,26 @@ app.post("/newBuyOrder", async (req, res) => {
     });
     await newOrder.save();
 
-    let change = (Math.random() * 5).toFixed(2);
-    let newHolding = new HoldingsModel({
+    let holding = await HoldingsModel.findOne({
       name: req.body.name,
-      qty: req.body.qty,
-      avg: Number(req.body.price).toFixed(2),
-      price: Number(req.body.price * (1 + change / 100)).toFixed(2),
-      net: `+${change}%`,
-      day: `+${change}%`,
+      price: req.body.price,
     });
-    await newHolding.save();
+
+    if (holding) {
+      holding.qty += req.body.qty;
+      await holding.save();
+    } else {
+      let change = (Math.random() * 5).toFixed(2);
+      let newHolding = new HoldingsModel({
+        name: req.body.name,
+        qty: req.body.qty,
+        avg: Number(req.body.price).toFixed(2),
+        price: Number(req.body.price * (1 + change / 100)).toFixed(2),
+        net: `+${change}%`,
+        day: `+${change}%`,
+      });
+      await newHolding.save();
+    }
 
     res.send("Order saved!");
   } catch (error) {
