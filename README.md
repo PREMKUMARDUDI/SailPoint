@@ -70,27 +70,27 @@ A comprehensive full-stack stock trading platform that enables users to manage t
 
 ## 📁 Project Structure
 
-```
+```bash
 SailPoint/
-├── backend/                 # Node.js API server
-│   ├── controllers/         # Request handlers
-│   ├── middlewares/         # Authentication & validation
-│   ├── models/             # Database models
-│   ├── routes/             # API route definitions
-│   ├── schemas/            # Mongoose schemas
-│   ├── utils/              # Utility functions
-│   └── index.js            # Server entry point
-├── frontend/               # React landing application
-│   ├── public/             # Static assets
+├── backend/                  # Node.js API server
+│   ├── controllers/          # Request handlers
+│   ├── middlewares/          # Authentication & validation
+│   ├── models/               # Database models
+│   ├── routes/               # API route definitions
+│   ├── schemas/              # Mongoose schemas
+│   ├── utils/                # Utility functions
+│   └── index.js              # Server entry point
+├── frontend/                 # React landing application
+│   ├── public/               # Static assets
 │   ├── src/
-│   │   └── landing_page/   # Landing page components
-│   └── package.json        # Frontend dependencies
-├── dashboard/              # React trading dashboard
-│   ├── public/             # Dashboard assets
+│   │   └── landing_page/     # Landing page components
+│   └── package.json          # Frontend dependencies
+├── dashboard/                # React trading dashboard
+│   ├── public/               # Dashboard assets
 │   ├── src/
-│   │   ├── components/     # Dashboard components
-│   │   └── data/           # Mock data and utilities
-│   └── package.json        # Dashboard dependencies
+│   │   ├── components/       # Dashboard components
+│   │   └── data/             # Mock data and utilities
+│   └── package.json          # Dashboard dependencies
 └── README.md
 ```
 
